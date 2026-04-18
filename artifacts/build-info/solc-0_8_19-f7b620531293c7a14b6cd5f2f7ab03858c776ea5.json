@@ -1,0 +1,36 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_19-f7b620531293c7a14b6cd5f2f7ab03858c776ea5",
+  "solcVersion": "0.8.19",
+  "solcLongVersion": "0.8.19+commit.7dd6d404",
+  "compilerType": "solc",
+  "userSourceNameMap": {
+    "contracts/HungerReliefAgent.sol": "project/contracts/HungerReliefAgent.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "paris",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/HungerReliefAgent.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.19;\n\ncontract HungerReliefAgent {\n    struct Hotspot {\n        uint256 id;\n        string locationHash;\n        uint256 severity;\n        uint256 estimatedCost;\n        bool isActive;\n        uint256 createdAt;\n    }\n    \n    struct Donation {\n        address donor;\n        uint256 piAmount;\n        uint256 gvcValue;\n        uint256 timestamp;\n        uint256 hotspotId;\n    }\n    \n    mapping(uint256 => Hotspot) public hotspots;\n    mapping(uint256 => Donation[]) public donations;\n    uint256 public hotspotCount;\n    uint256 public constant GVC_MULTIPLIER = 314159;\n    \n    address public operator;\n    address public treasury;\n    \n    event HotspotRegistered(uint256 id, string locationHash, uint256 severity);\n    event DonationReceived(address indexed donor, uint256 amount, uint256 gvcValue);\n    \n    constructor(address _treasury) {\n        operator = msg.sender;\n        treasury = _treasury;\n    }\n    \n    function registerHotspot(string memory _locationHash, uint256 _severity, uint256 _cost) external returns (uint256) {\n        require(msg.sender == operator, \"Only AI agent\");\n        uint256 id = hotspotCount++;\n        hotspots[id] = Hotspot(id, _locationHash, _severity, _cost, true, block.timestamp);\n        emit HotspotRegistered(id, _locationHash, _severity);\n        return id;\n    }\n    \n    function donate(uint256 _hotspotId) external payable {\n        require(hotspots[_hotspotId].isActive, \"Hotspot resolved\");\n        uint256 gvcValue = (msg.value * GVC_MULTIPLIER) / 1000;\n        donations[_hotspotId].push(Donation(msg.sender, msg.value, gvcValue, block.timestamp, _hotspotId));\n        emit DonationReceived(msg.sender, msg.value, gvcValue);\n    }\n    \n    function getHotspotSummary(uint256 _id) external view returns (uint256 totalDonated, uint256 donorCount, bool isResolved) {\n        Donation[] memory d = donations[_id];\n        for(uint i = 0; i < d.length; i++) { totalDonated += d[i].piAmount; }\n        return (totalDonated, d.length, !hotspots[_id].isActive);\n    }\n}\n"
+      }
+    }
+  }
+}

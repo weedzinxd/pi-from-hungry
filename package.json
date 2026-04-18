@@ -1,0 +1,43 @@
+{
+  "name": "pi-from-hungry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pi:ping": "tsx src/client.ts ping",
+    "pi:status": "tsx src/client.ts status",
+    "pi:transfers": "tsx src/client.ts transfers",
+    "pi:scan": "tsx src/scanner.ts",
+    "pi:watch": "tsx src/scanner.ts --monitor",
+    "pi:blockchain": "tsx src/blockchain-cli.ts",
+    "pi:deploy": "tsx scripts/deploy-pi.ts",
+    "pi:soroban:prepare": "tsx scripts/prepare-soroban-deploy.ts",
+    "pi:soroban:deploy": "tsx scripts/deploy-soroban.ts",
+    "pi:soroban:invoke": "tsx scripts/invoke-soroban.ts",
+    "pi:soroban:summary": "tsx scripts/soroban-summary.ts",
+    "pi:soroban:events": "tsx scripts/soroban-events.ts",
+    "pi:soroban:register:simulate": "tsx scripts/soroban-register-simulate.ts",
+    "pi:soroban:donate:simulate": "tsx scripts/soroban-donate-simulate.ts",
+    "pi:soroban:get-donation": "tsx scripts/soroban-get-donation.ts",
+    "pi:soroban:xdr-preview": "tsx scripts/soroban-xdr-preview.ts",
+    "pi:detector": "python3 backend-ia/detector-fome.py",
+    "pi:integrate": "python3 backend-ia/integrar-blockchain.py",
+    "pi:soroban:guide": "echo 'Leia docs/SETUP_RUST_SOROBAN.md'",
+    "typecheck": "tsc --noEmit",
+    "dashboard:build": "npm --prefix dashboard run build",
+    "test": "npm run typecheck && npm run dashboard:build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "hardhat": "^3.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.8.0"
+  }
+}

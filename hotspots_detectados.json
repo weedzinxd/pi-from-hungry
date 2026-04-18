@@ -1,0 +1,57 @@
+[
+  {
+    "regiao": "Sahel, África",
+    "coordenadas": [
+      14.5,
+      -2.5
+    ],
+    "score_fome": 0.933,
+    "nivel_urgencia": "CRÍTICO",
+    "estimativa_custo_pi": 932.93,
+    "timestamp": "2026-04-01T21:39:05.946554"
+  },
+  {
+    "regiao": "Iêmen",
+    "coordenadas": [
+      15.5,
+      48.5
+    ],
+    "score_fome": 0.864,
+    "nivel_urgencia": "CRÍTICO",
+    "estimativa_custo_pi": 863.61,
+    "timestamp": "2026-04-01T21:39:05.946589"
+  },
+  {
+    "regiao": "Sudão do Sul",
+    "coordenadas": [
+      7.0,
+      30.0
+    ],
+    "score_fome": 0.838,
+    "nivel_urgencia": "ALTO",
+    "estimativa_custo_pi": 838.37,
+    "timestamp": "2026-04-01T21:39:05.946599"
+  },
+  {
+    "regiao": "Afeganistão",
+    "coordenadas": [
+      33.9,
+      67.7
+    ],
+    "score_fome": 0.768,
+    "nivel_urgencia": "ALTO",
+    "estimativa_custo_pi": 767.73,
+    "timestamp": "2026-04-01T21:39:05.946605"
+  },
+  {
+    "regiao": "Haiti",
+    "coordenadas": [
+      18.9,
+      -72.3
+    ],
+    "score_fome": 0.897,
+    "nivel_urgencia": "CRÍTICO",
+    "estimativa_custo_pi": 897.4,
+    "timestamp": "2026-04-01T21:39:05.946612"
+  }
+]

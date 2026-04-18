@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-04-01T20:45:17.181Z",
+  "network": "Pi Testnet",
+  "contract": "CDG6ZM2SHXIHD5HZ2E62B7D76RY5DUHDNQVPSHRVDNN7W4EW47FXLEXQ",
+  "registered": 5,
+  "failed": 0,
+  "results": [
+    {
+      "region": "Sahel, África",
+      "success": true,
+      "txHash": "536168656c2c20c38166726963612d31373735303736333133383633"
+    },
+    {
+      "region": "Iêmen",
+      "success": true,
+      "txHash": "49c3aa6d656e2d31373735303736333134353639"
+    },
+    {
+      "region": "Sudão do Sul",
+      "success": true,
+      "txHash": "537564c3a36f20646f2053756c2d31373735303736333135323733"
+    },
+    {
+      "region": "Afeganistão",
+      "success": true,
+      "txHash": "41666567616e697374c3a36f2d31373735303736333135393738"
+    },
+    {
+      "region": "Haiti",
+      "success": true,
+      "txHash": "48616974692d31373735303736333136363831"
+    }
+  ]
+}

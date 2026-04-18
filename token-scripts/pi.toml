@@ -1,0 +1,23 @@
+# Pi From Hungry - pi.toml
+# This file enables the HUNGER token to be listed in Pi Wallet
+
+[[CURRENCIES]]
+code="HUNGER"
+issuer="GAORA7V3H4RWZARFWUJANNDL4HT5S2FFNNQU7TEFF4FOSYTDE6B6HTLW"
+name="Pi From Hungry"
+desc="Humanitarian token to end global hunger. Each token represents a contribution to the GVC (Global Value Chain) protocol for transparent, efficient hunger relief. Built on Pi Network blockchain for maximum impact and zero corruption. 1 HUNGER = 1 meal for someone in need."
+image="https://raw.githubusercontent.com/weedzinxd/pi-from-hungry/main/assets/hunger-token.png"
+
+[DOCUMENTATION]
+orgName="Pi From Hungry"
+orgDescription="AI-powered hunger eradication platform using GVC + Pi Network"
+orgWebsite="https://github.com/weedzinxd/pi-from-hungry"
+orgGithub="https://github.com/weedzinxd/pi-from-hungry"
+
+[CUSTODIANS]
+custodian="Pi From Hungry Foundation"
+custodianDescription="Decentralized humanitarian organization building the future of food security"
+
+[VALIDATORS]
+validator="Pi Network Testnet"
+validatorDescription="Built on Pi Network blockchain for transparency and trust"

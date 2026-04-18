@@ -1,0 +1,17 @@
+/* Root TypeScript config for Node-side tooling only.
+   The Next.js dashboard has its own tsconfig in dashboard/tsconfig.json. */
+{
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "hardhat.config.ts"],
+  "exclude": ["dashboard", "node_modules", "dist"]
+}

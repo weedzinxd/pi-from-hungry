@@ -1,0 +1,97 @@
+[
+  {
+    "function": "registerHotspot",
+    "params": [
+      "simulado/Sahel,_África",
+      8,
+      "875509999999999934464"
+    ],
+    "metadata": {
+      "regiao": "Sahel, África",
+      "coordenadas": [
+        14.5,
+        -2.5
+      ],
+      "score_fome": 0.876,
+      "nivel_urgencia": "CRÍTICO",
+      "estimativa_custo_pi": 875.51,
+      "timestamp": "2026-04-01T19:53:03.028292"
+    }
+  },
+  {
+    "function": "registerHotspot",
+    "params": [
+      "simulado/Iêmen",
+      8,
+      "869520000000000000000"
+    ],
+    "metadata": {
+      "regiao": "Iêmen",
+      "coordenadas": [
+        15.5,
+        48.5
+      ],
+      "score_fome": 0.87,
+      "nivel_urgencia": "CRÍTICO",
+      "estimativa_custo_pi": 869.52,
+      "timestamp": "2026-04-01T19:53:03.028473"
+    }
+  },
+  {
+    "function": "registerHotspot",
+    "params": [
+      "simulado/Sudão_do_Sul",
+      8,
+      "872120000000000000000"
+    ],
+    "metadata": {
+      "regiao": "Sudão do Sul",
+      "coordenadas": [
+        7.0,
+        30.0
+      ],
+      "score_fome": 0.872,
+      "nivel_urgencia": "CRÍTICO",
+      "estimativa_custo_pi": 872.12,
+      "timestamp": "2026-04-01T19:53:03.028562"
+    }
+  },
+  {
+    "function": "registerHotspot",
+    "params": [
+      "simulado/Afeganistão",
+      7,
+      "710470000000000065536"
+    ],
+    "metadata": {
+      "regiao": "Afeganistão",
+      "coordenadas": [
+        33.9,
+        67.7
+      ],
+      "score_fome": 0.71,
+      "nivel_urgencia": "ALTO",
+      "estimativa_custo_pi": 710.47,
+      "timestamp": "2026-04-01T19:53:03.028642"
+    }
+  },
+  {
+    "function": "registerHotspot",
+    "params": [
+      "simulado/Haiti",
+      7,
+      "748120000000000000000"
+    ],
+    "metadata": {
+      "regiao": "Haiti",
+      "coordenadas": [
+        18.9,
+        -72.3
+      ],
+      "score_fome": 0.748,
+      "nivel_urgencia": "ALTO",
+      "estimativa_custo_pi": 748.12,
+      "timestamp": "2026-04-01T19:53:03.028723"
+    }
+  }
+]
