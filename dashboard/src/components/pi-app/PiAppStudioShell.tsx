@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { CheckCircle2, ExternalLink, Flame, ShieldCheck, Smartphone, Sparkles, Wallet } from 'lucide-react';
 import { PiImpactPassport } from '@/components/pi-app/PiImpactPassport';
+import { PiJourneyPanel } from '@/components/pi-app/PiJourneyPanel';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
 import { useAnalyticsInsights } from '@/hooks/useAnalyticsInsights';
 import { useHotspots } from '@/hooks/useHotspots';
@@ -77,6 +78,7 @@ export function PiAppStudioShell() {
 
   const pendingApproval = recentIntents.find((intent) => intent.status === 'pending_server_approval');
   const pendingCompletion = recentIntents.find((intent) => intent.status === 'approved');
+  const latestIntent = recentIntents[0];
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-black text-white">
@@ -138,6 +140,8 @@ export function PiAppStudioShell() {
             {authSession.data?.note ?? 'Esta verificação ainda é demo-safe e precisa de endurecimento server-side antes de uso real.'}
           </p>
         </div>
+
+        <PiJourneyPanel verified={Boolean(authSession.data?.verified)} latestIntent={latestIntent} impact={impact.data} />
 
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
@@ -290,7 +294,7 @@ export function PiAppStudioShell() {
           <div className="mt-4">
             <PiImpactPassport impact={impact.data} />
           </div>
-          <Link href="/pi-app/impact" className="mt-4 inline-flex text-xs font-semibold text-cyan-400 hover:text-cyan-300">
+          <Link href={`/pi-app/impact?username=${encodeURIComponent(activeUsername)}`} className="mt-4 inline-flex text-xs font-semibold text-cyan-400 hover:text-cyan-300">
             Abrir área dedicada de impacto
           </Link>
         </div>

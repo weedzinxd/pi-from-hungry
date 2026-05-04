@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { PiImpactPassport } from '@/components/pi-app/PiImpactPassport';
-import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
-import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewPanel';
+import { PiImpactWorkspace } from '@/components/pi-app/PiImpactWorkspace';
 
 export const metadata: Metadata = {
   title: 'Pi From Hungry • Impact Passport',
@@ -23,11 +22,9 @@ export default function PiAppImpactPage() {
           Área dedicada para futura expansão do perfil do pioneiro com badges, histórico e milestones dentro do ecossistema Pi.
         </p>
       </div>
-      <div className="space-y-4">
-        <PiPaymentsOverviewPanel />
-        <PiImpactPassport />
-        <PiPaymentsFeedPanel />
-      </div>
+      <Suspense fallback={<div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm text-zinc-400">Carregando impacto...</div>}>
+        <PiImpactWorkspace />
+      </Suspense>
       <div className="mt-6 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm text-zinc-300">
         <p>• Próxima evolução: sincronizar esta área com auth oficial, pagamentos reais e provas por usuário.</p>
       </div>

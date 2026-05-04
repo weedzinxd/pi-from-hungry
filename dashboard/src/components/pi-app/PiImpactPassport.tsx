@@ -41,6 +41,11 @@ export function PiImpactPassport({ impact }: { impact?: PiUserImpactResponse }) 
           </span>
         ) : null}
       </div>
+      <p className="mt-4 text-xs text-zinc-500">
+        {impact?.latestIntents?.length
+          ? `Última atividade: ${impact.latestIntents[0].hotspotLabel} • ${impact.latestIntents[0].status}`
+          : 'Nenhuma atividade pessoal registrada ainda.'}
+      </p>
     </div>
   );
 }

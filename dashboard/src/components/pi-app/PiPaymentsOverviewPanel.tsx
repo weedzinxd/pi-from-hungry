@@ -11,6 +11,7 @@ export function PiPaymentsOverviewPanel() {
     { icon: Coins, label: 'Completed Pi', value: (data?.totals.completedPi ?? 0).toFixed(2), color: 'text-emerald-300' },
     { icon: Users, label: 'Unique donors', value: String(data?.totals.uniqueDonors ?? 0), color: 'text-yellow-300' },
   ];
+  const completionRate = (data?.totals.intents ?? 0) > 0 ? ((data?.totals.completed ?? 0) / (data?.totals.intents ?? 1)) * 100 : 0;
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
@@ -26,6 +27,15 @@ export function PiPaymentsOverviewPanel() {
             <p className="text-[11px] text-zinc-500">{card.label}</p>
           </div>
         ))}
+      </div>
+      <div className="mt-4">
+        <div className="mb-1 flex items-center justify-between text-[11px] text-zinc-500">
+          <span>Completion rate</span>
+          <span>{completionRate.toFixed(1)}%</span>
+        </div>
+        <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
+          <div className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500" style={{ width: `${Math.min(completionRate, 100)}%` }} />
+        </div>
       </div>
     </div>
   );

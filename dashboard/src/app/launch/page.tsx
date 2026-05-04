@@ -60,6 +60,7 @@ export default function LaunchPage() {
                 <li>• Validar /proofs, /methodology e /transparency em produção.</li>
                 <li>• Revisar mensagem pública de demo/testnet na home.</li>
                 <li>• Validar /pi-app e /pi-app/impact em mobile antes de cadastrar no App Studio.</li>
+                <li>• Revisar journey status, completion rate e impact feed com dados consistentes.</li>
               </ul>
             </PanelBody>
           </Panel>
