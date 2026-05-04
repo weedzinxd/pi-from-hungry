@@ -12,7 +12,7 @@ const checks = [
   'Página pública de proofs',
   'Página pública de transparência',
   'Detector integrado como fonte de hotspots',
-  'Mini-app Pi App Studio com auth demo, intents, approve/complete, impact passport, milestones, timeline pessoal e feed agregado',
+  'Mini-app Pi App Studio com auth demo, intents, approve/complete, impact passport, milestones, próximas ações, timeline pessoal e feed agregado',
 ];
 
 export default function LaunchPage() {

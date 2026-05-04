@@ -9,6 +9,7 @@ import { PiMilestonesPanel } from '@/components/pi-app/PiMilestonesPanel';
 import { PiMiniAppOnboarding } from '@/components/pi-app/PiMiniAppOnboarding';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
 import { PiPersonalTimeline } from '@/components/pi-app/PiPersonalTimeline';
+import { PiRecommendedActionPanel } from '@/components/pi-app/PiRecommendedActionPanel';
 import { useAnalyticsInsights } from '@/hooks/useAnalyticsInsights';
 import { useHotspots } from '@/hooks/useHotspots';
 import { usePiAuthSession } from '@/hooks/usePiAuthSession';
@@ -107,7 +108,7 @@ export function PiAppStudioShell() {
       </div>
 
       <div className="flex-1 space-y-4 px-4 py-5">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+        <div id="session" className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-white">Pi Browser session</p>
@@ -146,6 +147,8 @@ export function PiAppStudioShell() {
 
         <PiMiniAppOnboarding />
 
+        <PiRecommendedActionPanel verified={Boolean(authSession.data?.verified)} latestIntent={latestIntent} impact={impact.data} />
+
         <PiJourneyPanel verified={Boolean(authSession.data?.verified)} latestIntent={latestIntent} impact={impact.data} />
 
         <div className="grid grid-cols-2 gap-3">
@@ -167,7 +170,7 @@ export function PiAppStudioShell() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+        <div id="donation-intent" className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <h2 className="text-sm font-semibold text-white">Create donation intent</h2>
@@ -238,7 +241,7 @@ export function PiAppStudioShell() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+        <div id="server-actions" className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <h2 className="text-sm font-semibold text-white">Server actions</h2>
