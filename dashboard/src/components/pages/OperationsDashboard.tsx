@@ -10,6 +10,7 @@ import { CrisisMap, LeafletCSS } from '@/components/map/CrisisMap';
 import { KpiStrip } from '@/components/metrics/KpiStrip';
 import { AnalyticsSummaryStrip } from '@/components/analytics/AnalyticsSummaryStrip';
 import { MoversPanel } from '@/components/analytics/MoversPanel';
+import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewPanel';
 import { ContractEventsPanel } from '@/components/observability/ContractEventsPanel';
 import { ContractSummaryPanel } from '@/components/observability/ContractSummaryPanel';
 import { NetworkOverview } from '@/components/observability/NetworkOverview';
@@ -66,6 +67,9 @@ export function OperationsDashboard() {
 
         <ImpactHero events={events} />
         <AnalyticsSummaryStrip />
+        <div className="mb-6">
+          <PiPaymentsOverviewPanel />
+        </div>
         <KpiStrip events={events} />
         <div className="mb-6">
           <MoversPanel />

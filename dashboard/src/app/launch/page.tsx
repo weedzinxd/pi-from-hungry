@@ -1,3 +1,4 @@
+import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewPanel';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
@@ -11,7 +12,7 @@ const checks = [
   'Página pública de proofs',
   'Página pública de transparência',
   'Detector integrado como fonte de hotspots',
-  'Mini-app Pi App Studio com auth demo, intents, approve/complete e my-impact',
+  'Mini-app Pi App Studio com auth demo, intents, approve/complete, impact passport e feed agregado',
 ];
 
 export default function LaunchPage() {
@@ -32,6 +33,10 @@ export default function LaunchPage() {
 
         <div className="mb-8">
           <PublicStatusStrip />
+        </div>
+
+        <div className="mb-8">
+          <PiPaymentsOverviewPanel />
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">

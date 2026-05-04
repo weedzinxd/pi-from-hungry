@@ -2,6 +2,7 @@
 
 import { Coins, HandHelping, HeartHandshake, Scale, Users, Wallet } from 'lucide-react';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
+import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewPanel';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
@@ -55,8 +56,10 @@ export default function DonationsPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <PiPaymentsFeedPanel />
+        <div className="mt-8 space-y-4">
+          <PiPaymentsOverviewPanel />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <PiPaymentsFeedPanel />
           <Panel>
             <PanelHeader title="Leitura pública recomendada" subtitle="Como apresentar esta seção ao público" right={<Scale className="h-4 w-4 text-emerald-400" />} />
             <PanelBody>
@@ -68,16 +71,17 @@ export default function DonationsPage() {
             </PanelBody>
           </Panel>
 
-          <Panel>
-            <PanelHeader title="Próximo salto" subtitle="Para transformar esta área em operação real" />
-            <PanelBody>
-              <ul className="space-y-3 text-sm text-zinc-300">
-                <li>• Integrar eventos reais de doação e distribuição no contrato Soroban.</li>
-                <li>• Persistir donors, memos, approvals, completions e provas em banco/indexador dedicado.</li>
-                <li>• Exibir histórico temporal por hotspot e por ação auditável.</li>
-              </ul>
-            </PanelBody>
-          </Panel>
+            <Panel>
+              <PanelHeader title="Próximo salto" subtitle="Para transformar esta área em operação real" />
+              <PanelBody>
+                <ul className="space-y-3 text-sm text-zinc-300">
+                  <li>• Integrar eventos reais de doação e distribuição no contrato Soroban.</li>
+                  <li>• Persistir donors, memos, approvals, completions e provas em banco/indexador dedicado.</li>
+                  <li>• Exibir histórico temporal por hotspot e por ação auditável.</li>
+                </ul>
+              </PanelBody>
+            </Panel>
+          </div>
         </div>
       </main>
       <AppFooter />
