@@ -5,7 +5,9 @@ import { useMemo, useState } from 'react';
 import { CheckCircle2, ExternalLink, Flame, ShieldCheck, Smartphone, Sparkles, Wallet } from 'lucide-react';
 import { PiImpactPassport } from '@/components/pi-app/PiImpactPassport';
 import { PiJourneyPanel } from '@/components/pi-app/PiJourneyPanel';
+import { PiMiniAppOnboarding } from '@/components/pi-app/PiMiniAppOnboarding';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
+import { PiPersonalTimeline } from '@/components/pi-app/PiPersonalTimeline';
 import { useAnalyticsInsights } from '@/hooks/useAnalyticsInsights';
 import { useHotspots } from '@/hooks/useHotspots';
 import { usePiAuthSession } from '@/hooks/usePiAuthSession';
@@ -140,6 +142,8 @@ export function PiAppStudioShell() {
             {authSession.data?.note ?? 'Esta verificação ainda é demo-safe e precisa de endurecimento server-side antes de uso real.'}
           </p>
         </div>
+
+        <PiMiniAppOnboarding />
 
         <PiJourneyPanel verified={Boolean(authSession.data?.verified)} latestIntent={latestIntent} impact={impact.data} />
 
@@ -338,6 +342,8 @@ export function PiAppStudioShell() {
             {!featuredHotspots.length ? <p className="text-sm text-zinc-500">Nenhum hotspot disponível no momento.</p> : null}
           </div>
         </div>
+
+        <PiPersonalTimeline impact={impact.data} />
 
         <PiPaymentsFeedPanel />
 

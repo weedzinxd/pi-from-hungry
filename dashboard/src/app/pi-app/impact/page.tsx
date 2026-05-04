@@ -19,7 +19,7 @@ export default function PiAppImpactPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">Pi mini-app</p>
         <h1 className="mt-2 text-3xl font-black">Impact passport</h1>
         <p className="mt-3 text-sm text-zinc-400">
-          Área dedicada para futura expansão do perfil do pioneiro com badges, histórico e milestones dentro do ecossistema Pi.
+          Área dedicada para evolução do perfil do pioneiro com badges, timeline pessoal, histórico e milestones dentro do ecossistema Pi.
         </p>
       </div>
       <Suspense fallback={<div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm text-zinc-400">Carregando impacto...</div>}>
