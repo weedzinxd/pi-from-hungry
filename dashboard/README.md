@@ -54,6 +54,9 @@ NEXT_PUBLIC_API_URL=https://api.pi-from-hungry.org
 # Iniciar servidor de desenvolvimento
 npm run dev
 
+# Opcional: apontar para a FastAPI pública/local
+# NEXT_PUBLIC_API_URL=http://localhost:8080
+
 # O dashboard estará disponível em:
 # http://localhost:3000
 ```
@@ -74,14 +77,14 @@ npm run start
 
 | Tecnologia | Uso |
 |------------|-----|
-| **Next.js 14+** | Framework React |
+| **Next.js 16** | Framework React |
+| **React 19** | UI |
 | **TypeScript** | Type safety |
-| **TailwindCSS** | Estilização |
-| **shadcn/ui** | Componentes |
-| **deck.gl** | Visualização geoespacial |
+| **TailwindCSS 4** | Estilização |
+| **Leaflet** | Visualização geoespacial atual |
 | **Recharts** | Gráficos |
-| **Wagmi + Viem** | Integração Web3 |
-| **Socket.io** | Tempo real |
+| **TanStack Query** | Cache e sincronização |
+| **FastAPI + API Routes** | Integração de dados |
 
 ---
 
@@ -118,6 +121,8 @@ dashboard/
 ---
 
 ## 🔌 Integração com Backend
+
+O dashboard opera com fallback para mock local, mas em ambiente público deve usar a FastAPI configurada em `NEXT_PUBLIC_API_URL`.
 
 ### Pi Network RPC
 

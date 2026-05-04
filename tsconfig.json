@@ -12,6 +12,6 @@
     "outDir": "dist",
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "hardhat.config.ts"],
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "services/**/*.ts"],
   "exclude": ["dashboard", "node_modules", "dist"]
 }

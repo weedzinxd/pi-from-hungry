@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: pi-from-hungry-api
+    env: python
+    rootDir: .
+    buildCommand: pip install -r apps/api/requirements.txt
+    startCommand: python3 -m uvicorn apps.api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PI_RPC_URL
+        value: https://rpc.testnet.minepi.com
+      - key: SOROBAN_RPC_URL
+        value: https://rpc.testnet.minepi.com
+      - key: API_HOTSPOTS_SOURCE
+        value: auto
+
+  - type: web
+    name: pi-from-hungry-dashboard
+    env: node
+    rootDir: dashboard
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: pi-from-hungry-api
+          type: web
+          property: hostport
+      - key: NEXT_PUBLIC_PI_RPC_URL
+        value: https://rpc.testnet.minepi.com

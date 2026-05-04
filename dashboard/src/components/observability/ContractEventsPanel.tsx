@@ -18,7 +18,12 @@ export function ContractEventsPanel({
   data?: ContractEventsResponse;
   isLoading?: boolean;
 }) {
-  const tone = data?.source === 'rpc' ? 'success' : data?.source === 'fallback' ? 'warning' : 'neutral';
+  const tone =
+    data?.source === 'rpc' || data?.source === 'indexer'
+      ? 'success'
+      : data?.source === 'fallback'
+        ? 'warning'
+        : 'neutral';
 
   return (
     <Panel>

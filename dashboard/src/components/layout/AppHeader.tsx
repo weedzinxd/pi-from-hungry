@@ -1,8 +1,24 @@
 'use client';
 
+import Link from 'next/link';
 import { Activity, HandCoins, Utensils } from 'lucide-react';
 import { StatusPill } from '@/components/ui/StatusPill';
 import type { NetworkStatus } from '@/types/domain';
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/hotspots', label: 'Hotspots' },
+  { href: '/analytics', label: 'Analytics' },
+  { href: '/comparison', label: 'Comparison' },
+  { href: '/pi-app', label: 'Pi App' },
+  { href: '/donations', label: 'Donations' },
+  { href: '/proofs', label: 'Proofs' },
+  { href: '/status', label: 'Status' },
+  { href: '/methodology', label: 'Methodology' },
+  { href: '/launch', label: 'Launch' },
+  { href: '/transparency', label: 'Transparência' },
+];
 
 export function AppHeader({ networkStatus }: { networkStatus?: NetworkStatus }) {
   const tone =
@@ -34,14 +50,21 @@ export function AppHeader({ networkStatus }: { networkStatus?: NetworkStatus }) 
           </div>
 
           <div className="flex items-center gap-3">
+            <nav className="hidden lg:flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900/80 p-1 text-xs font-medium">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href} className="rounded-md px-3 py-2 text-zinc-300 transition hover:bg-zinc-800 hover:text-white">
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900 text-xs font-medium">
               <Activity className="w-4 h-4 text-zinc-400" />
               <StatusPill label={networkStatus?.status ?? 'offline'} tone={tone} />
               <span className="text-zinc-400">ledger {networkStatus?.latestLedger ?? 0}</span>
             </div>
-            <button className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-black font-bold text-sm rounded-lg flex items-center gap-2">
-              <HandCoins className="w-4 h-4" />DOAR PI
-            </button>
+            <Link href="/transparency" className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-black font-bold text-sm rounded-lg flex items-center gap-2">
+              <HandCoins className="w-4 h-4" />APOIAR DEMO
+            </Link>
           </div>
         </div>
       </div>

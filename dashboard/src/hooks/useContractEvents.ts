@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 export interface ContractEventsResponse {
   contractId: string;
   latestLedger: number;
-  source: 'rpc' | 'fallback' | 'unconfigured';
+  source: 'rpc' | 'indexer' | 'fallback' | 'unconfigured';
   events: Array<Record<string, unknown>>;
 }
 

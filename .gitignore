@@ -36,6 +36,9 @@ yarn-error.log*
 # Local runtime / generated files
 pi-session-*.html
 cache/
+.venv/
+__pycache__/
+*.pyc
 
 # TypeScript
 *.tsbuildinfo

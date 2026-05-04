@@ -1,7 +1,18 @@
 import { NextResponse } from 'next/server';
 import { dashboardConfig } from '@/lib/config';
+import type { NetworkStatus } from '@/types/domain';
+import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
+  try {
+    const apiResponse = await fetchExternalApi<NetworkStatus>('/network-status');
+    if (apiResponse) {
+      return NextResponse.json(apiResponse, { status: 200 });
+    }
+  } catch {
+    // Fallback below.
+  }
+
   try {
     const response = await fetch(dashboardConfig.rpcUrl, {
       method: 'POST',

@@ -5,3 +5,7 @@ export function formatNumber(num: number): string {
   if (num >= 1e3) return `${(num / 1e3).toFixed(1)}K`;
   return num.toLocaleString();
 }
+
+export function formatPercent(value: number): string {
+  return `${(value * 100).toFixed(1)}%`;
+}

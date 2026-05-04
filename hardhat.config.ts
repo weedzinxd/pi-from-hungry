@@ -1,3 +1,5 @@
+// Legacy EVM/Hardhat configuration kept only for historical reference.
+// The canonical blockchain path for Pi From Hungry is Rust + Soroban.
 import { HardhatUserConfig } from "hardhat/config";
 
 const config: HardhatUserConfig = {

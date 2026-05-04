@@ -1,0 +1,222 @@
+[
+  {
+    "id": "pipeline-001",
+    "location": "Sahel, África",
+    "country": "Mali, Niger, Burkina Faso",
+    "region": "Africa",
+    "severity": "CRITICAL",
+    "affected": 9727888,
+    "piNeeded": 8755100000,
+    "piDistributed": 1660317164,
+    "peopleHelped": 2084547,
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.876 e enriquecimento climático em tempo quase real.",
+    "gvcActive": true,
+    "coordinates": [
+      14.5,
+      -2.5
+    ],
+    "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
+    "liveData": {
+      "temperature": 44,
+      "humidity": 5,
+      "windSpeed": 14,
+      "drought": "EXTREME"
+    },
+    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "analytics": {
+      "foodRiskScore": 0.901,
+      "climateStressScore": 0.903,
+      "operationalPriorityScore": 0.862,
+      "confidenceScore": 0.93,
+      "sourceModelVersion": "pfh-ml-pipeline-v2",
+      "computedAt": "2026-05-02T16:18:50.272780+00:00",
+      "precipitationAnomalyScore": 0.989,
+      "ndviProxy": 0.019
+    },
+    "evidence": {
+      "sources": [
+        "detector",
+        "open-meteo"
+      ],
+      "evidenceHash": "d5d96cbaef8004823379141414b885b03048584de474595f7de38824a7b28181",
+      "weatherSource": "open-meteo",
+      "detectorTimestamp": "2026-04-01T19:53:03.028292"
+    }
+  },
+  {
+    "id": "pipeline-002",
+    "location": "Iêmen",
+    "country": "Yemen",
+    "region": "Middle East",
+    "severity": "HIGH",
+    "affected": 9661333,
+    "piNeeded": 8695200000,
+    "piDistributed": 1520790480,
+    "peopleHelped": 2070285,
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.870 e enriquecimento climático em tempo quase real.",
+    "gvcActive": true,
+    "coordinates": [
+      15.5,
+      48.5
+    ],
+    "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
+    "liveData": {
+      "temperature": 31,
+      "humidity": 35,
+      "windSpeed": 22,
+      "drought": "MODERATE"
+    },
+    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "analytics": {
+      "foodRiskScore": 0.805,
+      "climateStressScore": 0.647,
+      "operationalPriorityScore": 0.795,
+      "confidenceScore": 0.93,
+      "sourceModelVersion": "pfh-ml-pipeline-v2",
+      "computedAt": "2026-05-02T16:18:51.205243+00:00",
+      "precipitationAnomalyScore": 0.884,
+      "ndviProxy": 0.235
+    },
+    "evidence": {
+      "sources": [
+        "detector",
+        "open-meteo"
+      ],
+      "evidenceHash": "ca8351faf9010f7e6b7040900ec0096b6e1f755323c64dde7659c2b0d919f30a",
+      "weatherSource": "open-meteo",
+      "detectorTimestamp": "2026-04-01T19:53:03.028473"
+    }
+  },
+  {
+    "id": "pipeline-003",
+    "location": "Sudão do Sul",
+    "country": "South Sudan",
+    "region": "Africa",
+    "severity": "HIGH",
+    "affected": 9690222,
+    "piNeeded": 8721200000,
+    "piDistributed": 1465859296,
+    "peopleHelped": 2076476,
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.872 e enriquecimento climático em tempo quase real.",
+    "gvcActive": true,
+    "coordinates": [
+      7.0,
+      30.0
+    ],
+    "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
+    "liveData": {
+      "temperature": 35,
+      "humidity": 24,
+      "windSpeed": 5,
+      "drought": "HIGH"
+    },
+    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "analytics": {
+      "foodRiskScore": 0.825,
+      "climateStressScore": 0.694,
+      "operationalPriorityScore": 0.764,
+      "confidenceScore": 0.93,
+      "sourceModelVersion": "pfh-ml-pipeline-v2",
+      "computedAt": "2026-05-02T16:18:52.141672+00:00",
+      "precipitationAnomalyScore": 0.916,
+      "ndviProxy": 0.151
+    },
+    "evidence": {
+      "sources": [
+        "detector",
+        "open-meteo"
+      ],
+      "evidenceHash": "cd858cd6b67eb3bf28e1c8b67a686af59c0b92bcbd41b5a893ef0783aaddefd3",
+      "weatherSource": "open-meteo",
+      "detectorTimestamp": "2026-04-01T19:53:03.028562"
+    }
+  },
+  {
+    "id": "pipeline-004",
+    "location": "Afeganistão",
+    "country": "Afghanistan",
+    "region": "Asia",
+    "severity": "ELEVATED",
+    "affected": 7894111,
+    "piNeeded": 7104700000,
+    "piDistributed": 997215692,
+    "peopleHelped": 1691595,
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.710 e enriquecimento climático em tempo quase real.",
+    "gvcActive": true,
+    "coordinates": [
+      33.9,
+      67.7
+    ],
+    "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
+    "liveData": {
+      "temperature": 3,
+      "humidity": 52,
+      "windSpeed": 8,
+      "drought": "MODERATE"
+    },
+    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "analytics": {
+      "foodRiskScore": 0.659,
+      "climateStressScore": 0.473,
+      "operationalPriorityScore": 0.638,
+      "confidenceScore": 0.93,
+      "sourceModelVersion": "pfh-ml-pipeline-v2",
+      "computedAt": "2026-05-02T16:18:53.067269+00:00",
+      "precipitationAnomalyScore": 0.846,
+      "ndviProxy": 0.344
+    },
+    "evidence": {
+      "sources": [
+        "detector",
+        "open-meteo"
+      ],
+      "evidenceHash": "125ee38d1811e9fb94fe51711f6cca33b85db3fab00238ac098d45eb5ae5a0d1",
+      "weatherSource": "open-meteo",
+      "detectorTimestamp": "2026-04-01T19:53:03.028642"
+    }
+  },
+  {
+    "id": "pipeline-005",
+    "location": "Haiti",
+    "country": "Haiti",
+    "region": "Caribbean",
+    "severity": "HIGH",
+    "affected": 8312444,
+    "piNeeded": 7481200000,
+    "piDistributed": 1158688256,
+    "peopleHelped": 1781238,
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.748 e enriquecimento climático em tempo quase real.",
+    "gvcActive": true,
+    "coordinates": [
+      18.9,
+      -72.3
+    ],
+    "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
+    "liveData": {
+      "temperature": 34,
+      "humidity": 41,
+      "windSpeed": 7,
+      "drought": "MODERATE"
+    },
+    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "analytics": {
+      "foodRiskScore": 0.739,
+      "climateStressScore": 0.641,
+      "operationalPriorityScore": 0.704,
+      "confidenceScore": 0.93,
+      "sourceModelVersion": "pfh-ml-pipeline-v2",
+      "computedAt": "2026-05-02T16:18:54.005917+00:00",
+      "precipitationAnomalyScore": 0.904,
+      "ndviProxy": 0.212
+    },
+    "evidence": {
+      "sources": [
+        "detector",
+        "open-meteo"
+      ],
+      "evidenceHash": "c4ef728745dc7392707dab4ba5b3109b14b6d51d9d59bbd4328d88b8cd5b9f6e",
+      "weatherSource": "open-meteo",
+      "detectorTimestamp": "2026-04-01T19:53:03.028723"
+    }
+  }
+]

@@ -1,6 +1,7 @@
+import Link from 'next/link';
 import { HandCoins, MapPin } from 'lucide-react';
 import { GVC_VALUE, PI_PRICE } from '@/lib/constants';
-import { formatNumber } from '@/lib/formatters';
+import { formatNumber, formatPercent } from '@/lib/formatters';
 import type { CrisisEvent } from '@/types/domain';
 
 export function DetailsPanel({ event }: { event: CrisisEvent | null }) {
@@ -47,9 +48,26 @@ export function DetailsPanel({ event }: { event: CrisisEvent | null }) {
           <div className="bg-zinc-800/50 rounded p-2"><p className="text-[10px] text-zinc-500">Já Ajudados</p><p className="text-sm font-bold text-emerald-400">{formatNumber(event.peopleHelped)}</p></div>
         </div>
         <p className="text-xs text-zinc-300">{event.description}</p>
-        <button className="w-full py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2">
-          <HandCoins className="w-4 h-4" />DOAR PI
-        </button>
+        {event.analytics ? (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="bg-zinc-800/50 rounded p-2">
+              <p className="text-[10px] text-zinc-500">Risk score</p>
+              <p className="text-sm font-bold text-white">{formatPercent(event.analytics.foodRiskScore)}</p>
+            </div>
+            <div className="bg-zinc-800/50 rounded p-2">
+              <p className="text-[10px] text-zinc-500">Confidence</p>
+              <p className="text-sm font-bold text-emerald-400">{formatPercent(event.analytics.confidenceScore)}</p>
+            </div>
+          </div>
+        ) : null}
+        <div className="grid gap-2 sm:grid-cols-2">
+          <Link href={`/hotspots/${event.id}`} className="w-full py-2 border border-zinc-700 bg-zinc-950 text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2">
+            <MapPin className="w-4 h-4" />DETALHES
+          </Link>
+          <Link href="/transparency" className="w-full py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2">
+            <HandCoins className="w-4 h-4" />APOIAR
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -22,6 +22,22 @@ export interface CrisisEvent {
     drought: string;
   };
   news: string;
+  analytics?: {
+    foodRiskScore: number;
+    climateStressScore: number;
+    operationalPriorityScore: number;
+    confidenceScore: number;
+    precipitationAnomalyScore?: number;
+    ndviProxy?: number;
+    sourceModelVersion: string;
+    computedAt: string;
+  };
+  evidence?: {
+    sources: string[];
+    evidenceHash: string;
+    weatherSource?: string;
+    detectorTimestamp?: string;
+  };
 }
 
 export interface NetworkStatus {

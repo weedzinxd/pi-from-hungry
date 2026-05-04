@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install root deps
+        run: npm install
+
+      - name: Install dashboard deps
+        run: npm --prefix dashboard install
+
+      - name: Install API deps
+        run: pip install -r apps/api/requirements.txt
+
+      - name: Python compile check
+        run: python -m py_compile apps/api/main.py apps/api/app/config.py apps/api/app/models.py apps/api/app/services.py apps/api/app/deployment.py
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Dashboard build
+        run: npm --prefix dashboard run build

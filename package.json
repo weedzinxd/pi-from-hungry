@@ -21,10 +21,16 @@
     "pi:soroban:get-donation": "tsx scripts/soroban-get-donation.ts",
     "pi:soroban:xdr-preview": "tsx scripts/soroban-xdr-preview.ts",
     "pi:detector": "python3 backend-ia/detector-fome.py",
+    "pi:pipeline:build": "python3 services/ml-pipeline/build_hotspots.py",
+    "pi:pipeline:refresh": "npm run pi:detector && npm run pi:pipeline:build",
     "pi:integrate": "python3 backend-ia/integrar-blockchain.py",
     "pi:soroban:guide": "echo 'Leia docs/SETUP_RUST_SOROBAN.md'",
-    "typecheck": "tsc --noEmit",
+    "api:dev": "python3 -m uvicorn apps.api.main:app --reload --host 0.0.0.0 --port 8080",
+    "dashboard:dev": "npm --prefix dashboard run dev",
     "dashboard:build": "npm --prefix dashboard run build",
+    "indexer:events": "tsx services/indexer/index-contract-events.ts",
+    "check:public-demo": "tsx scripts/check-public-demo.ts",
+    "typecheck": "tsc --noEmit",
     "test": "npm run typecheck && npm run dashboard:build"
   },
   "keywords": [],
@@ -38,6 +44,7 @@
     "@types/node": "^22.19.15",
     "hardhat": "^3.3.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.0"
   }
 }
