@@ -12,7 +12,7 @@ const checks = [
   'Página pública de proofs',
   'Página pública de transparência',
   'Detector integrado como fonte de hotspots',
-  'Mini-app Pi App Studio com auth demo, intents, approve/complete, impact passport, timeline pessoal e feed agregado',
+  'Mini-app Pi App Studio com auth demo, intents, approve/complete, impact passport, milestones, timeline pessoal e feed agregado',
 ];
 
 export default function LaunchPage() {
@@ -60,7 +60,7 @@ export default function LaunchPage() {
                 <li>• Validar /proofs, /methodology e /transparency em produção.</li>
                 <li>• Revisar mensagem pública de demo/testnet na home.</li>
                 <li>• Validar /pi-app e /pi-app/impact em mobile antes de cadastrar no App Studio.</li>
-                <li>• Revisar journey status, completion rate e impact feed com dados consistentes.</li>
+                <li>• Revisar journey status, completion rate, milestones e impact feed com dados consistentes.</li>
               </ul>
             </PanelBody>
           </Panel>

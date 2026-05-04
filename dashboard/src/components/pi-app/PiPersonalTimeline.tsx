@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Clock3, ExternalLink } from 'lucide-react';
 import type { PiUserImpactResponse } from '@/hooks/usePiUserImpact';
 
@@ -18,7 +19,7 @@ export function PiPersonalTimeline({ impact }: { impact?: PiUserImpactResponse }
       <div className="space-y-2">
         {intents.length ? (
           intents.map((intent) => (
-            <div key={intent.paymentId} className="rounded-xl border border-zinc-800 bg-zinc-950 p-3">
+            <Link key={intent.paymentId} href={`/hotspots/${intent.hotspotId}`} className="block rounded-xl border border-zinc-800 bg-zinc-950 p-3 transition hover:border-cyan-500/40">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="font-semibold text-white">{intent.hotspotLabel}</p>
@@ -27,7 +28,7 @@ export function PiPersonalTimeline({ impact }: { impact?: PiUserImpactResponse }
                 </div>
                 <span className="rounded-full bg-zinc-800 px-2 py-1 text-[10px] font-semibold text-zinc-300">{intent.txid ? 'tx' : 'intent'}</span>
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <p className="text-sm text-zinc-500">Sem atividade pessoal registrada ainda.</p>

@@ -20,8 +20,9 @@ Essa rota foi desenhada para funcionar como **preview público** fora do Pi Brow
 - visão agregada: `GET /pi-payments/overview` e `GET /pi-payments/feed`
 - badges básicos de impacto (Supporter, Finisher, Impact Builder, Recurring Donor)
 - timeline pessoal por pioneiro
+- milestones básicos de impacto
 - fallback seguro quando o SDK não estiver disponível
-- cards de hotspots críticos, proofs, intents, server actions, impacto pessoal, passaporte de impacto, onboarding e feed agregado
+- cards de hotspots críticos, proofs, intents, server actions, impacto pessoal, passaporte de impacto, onboarding, milestones e feed agregado
 
 ## Variáveis de ambiente
 No dashboard:

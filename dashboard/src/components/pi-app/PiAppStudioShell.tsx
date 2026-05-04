@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { CheckCircle2, ExternalLink, Flame, ShieldCheck, Smartphone, Sparkles, Wallet } from 'lucide-react';
 import { PiImpactPassport } from '@/components/pi-app/PiImpactPassport';
 import { PiJourneyPanel } from '@/components/pi-app/PiJourneyPanel';
+import { PiMilestonesPanel } from '@/components/pi-app/PiMilestonesPanel';
 import { PiMiniAppOnboarding } from '@/components/pi-app/PiMiniAppOnboarding';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
 import { PiPersonalTimeline } from '@/components/pi-app/PiPersonalTimeline';
@@ -297,6 +298,9 @@ export function PiAppStudioShell() {
           <p className="mt-3 text-xs text-zinc-500">Usuário ativo: <span className="text-white">@{activeUsername}</span></p>
           <div className="mt-4">
             <PiImpactPassport impact={impact.data} />
+          </div>
+          <div className="mt-4">
+            <PiMilestonesPanel impact={impact.data} />
           </div>
           <Link href={`/pi-app/impact?username=${encodeURIComponent(activeUsername)}`} className="mt-4 inline-flex text-xs font-semibold text-cyan-400 hover:text-cyan-300">
             Abrir área dedicada de impacto

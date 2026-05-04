@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { PiImpactPassport } from '@/components/pi-app/PiImpactPassport';
+import { PiMilestonesPanel } from '@/components/pi-app/PiMilestonesPanel';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
 import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewPanel';
 import { PiPersonalTimeline } from '@/components/pi-app/PiPersonalTimeline';
@@ -24,6 +25,7 @@ export function PiImpactWorkspace() {
       </div>
       <PiPaymentsOverviewPanel />
       <PiImpactPassport impact={impact.data} />
+      <PiMilestonesPanel impact={impact.data} />
       <PiPersonalTimeline impact={impact.data} />
       <PiPaymentsFeedPanel />
     </div>

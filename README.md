@@ -183,7 +183,7 @@ npm run indexer:events
 # /comparison
 # /pi-app (shell mobile para Pi App Studio / Pi Browser)
 # /pi-app/impact (área dedicada de impacto do pioneiro)
-# mini-app agora inclui onboarding, journey status e timeline pessoal
+# mini-app agora inclui onboarding, journey status, milestones e timeline pessoal
 # /dashboard (agora com movers + analytics summary)
 # endpoints Pi mini-app: /pi-auth/verify, /pi-payments/intents, /pi-payments/intents/{id}/approve, /pi-payments/intents/{id}/complete, /pi-payments/my-impact, /pi-payments/overview, /pi-payments/feed
 # donations e dashboard agora incluem visão agregada do mini-app Pi
