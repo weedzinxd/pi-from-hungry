@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-13T20:52:46.542788+00:00",
+  "modelVersion": "pfh-ml-pipeline-v3",
+  "hotspotsCount": 5,
+  "durationMs": 5080.14,
+  "providers": {
+    "detector": {
+      "name": "backend-ia detector",
+      "records": 5
+    },
+    "currentClimate": {
+      "name": "Open-Meteo forecast",
+      "successCount": 5,
+      "fallbackCount": 0
+    },
+    "historicalClimate": {
+      "name": "Open-Meteo archive",
+      "window": "30d recent vs 90d baseline",
+      "successCount": 5,
+      "fallbackCount": 0
+    }
+  },
+  "metrics": {
+    "avgConfidenceScore": 0.98,
+    "avgPrecipitationAnomalyScore": 0.335,
+    "avgThermalAnomalyScore": 0.509
+  }
+}

@@ -4,12 +4,12 @@
     "location": "Sahel, África",
     "country": "Mali, Niger, Burkina Faso",
     "region": "Africa",
-    "severity": "CRITICAL",
+    "severity": "ELEVATED",
     "affected": 9727888,
     "piNeeded": 8755100000,
-    "piDistributed": 1660317164,
+    "piDistributed": 1067071588,
     "peopleHelped": 2084547,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.876 e enriquecimento climático em tempo quase real.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.876, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       14.5,
@@ -17,29 +17,37 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 44,
-      "humidity": 5,
-      "windSpeed": 14,
-      "drought": "EXTREME"
+      "temperature": 37,
+      "humidity": 17,
+      "windSpeed": 5,
+      "drought": "MODERATE"
     },
-    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
     "analytics": {
-      "foodRiskScore": 0.901,
-      "climateStressScore": 0.903,
-      "operationalPriorityScore": 0.862,
-      "confidenceScore": 0.93,
-      "sourceModelVersion": "pfh-ml-pipeline-v2",
-      "computedAt": "2026-05-02T16:18:50.272780+00:00",
-      "precipitationAnomalyScore": 0.989,
-      "ndviProxy": 0.019
+      "foodRiskScore": 0.626,
+      "climateStressScore": 0.519,
+      "operationalPriorityScore": 0.554,
+      "confidenceScore": 0.98,
+      "sourceModelVersion": "pfh-ml-pipeline-v3",
+      "computedAt": "2026-05-13T20:52:47.648661+00:00",
+      "precipitationAnomalyScore": 0.0,
+      "thermalAnomalyScore": 0.539,
+      "dryDaysRatio": 0.933,
+      "ndviProxy": 0.537,
+      "recentPrecipitationMm": 3.9,
+      "baselinePrecipitationMm": 0.1,
+      "recentTemperatureMaxAvg": 40.65,
+      "baselineTemperatureMaxAvg": 36.34
     },
     "evidence": {
       "sources": [
         "detector",
-        "open-meteo"
+        "open-meteo-current",
+        "open-meteo-archive"
       ],
-      "evidenceHash": "d5d96cbaef8004823379141414b885b03048584de474595f7de38824a7b28181",
-      "weatherSource": "open-meteo",
+      "evidenceHash": "b4e991ef02c55677a75a5361721002f8a6b6ff6da3b5b506db83bc0ed5b1eca5",
+      "weatherSource": "open-meteo-current",
+      "historicalClimateSource": "open-meteo-archive",
       "detectorTimestamp": "2026-04-01T19:53:03.028292"
     }
   },
@@ -51,9 +59,9 @@
     "severity": "HIGH",
     "affected": 9661333,
     "piNeeded": 8695200000,
-    "piDistributed": 1520790480,
+    "piDistributed": 1622176512,
     "peopleHelped": 2070285,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.870 e enriquecimento climático em tempo quase real.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.870, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       15.5,
@@ -61,29 +69,37 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 31,
-      "humidity": 35,
-      "windSpeed": 22,
-      "drought": "MODERATE"
+      "temperature": 27,
+      "humidity": 33,
+      "windSpeed": 8,
+      "drought": "HIGH"
     },
-    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
     "analytics": {
-      "foodRiskScore": 0.805,
-      "climateStressScore": 0.647,
-      "operationalPriorityScore": 0.795,
-      "confidenceScore": 0.93,
-      "sourceModelVersion": "pfh-ml-pipeline-v2",
-      "computedAt": "2026-05-02T16:18:51.205243+00:00",
-      "precipitationAnomalyScore": 0.884,
-      "ndviProxy": 0.235
+      "foodRiskScore": 0.816,
+      "climateStressScore": 0.657,
+      "operationalPriorityScore": 0.848,
+      "confidenceScore": 0.98,
+      "sourceModelVersion": "pfh-ml-pipeline-v3",
+      "computedAt": "2026-05-13T20:52:48.639178+00:00",
+      "precipitationAnomalyScore": 1.0,
+      "thermalAnomalyScore": 0.717,
+      "dryDaysRatio": 1.0,
+      "ndviProxy": 0.171,
+      "recentPrecipitationMm": 0.0,
+      "baselinePrecipitationMm": 8.2,
+      "recentTemperatureMaxAvg": 35.9,
+      "baselineTemperatureMaxAvg": 30.16
     },
     "evidence": {
       "sources": [
         "detector",
-        "open-meteo"
+        "open-meteo-current",
+        "open-meteo-archive"
       ],
-      "evidenceHash": "ca8351faf9010f7e6b7040900ec0096b6e1f755323c64dde7659c2b0d919f30a",
-      "weatherSource": "open-meteo",
+      "evidenceHash": "421e8bbdaae9e81a22eb1535895033331ea84d36502577157b3baf16a9cb5e4c",
+      "weatherSource": "open-meteo-current",
+      "historicalClimateSource": "open-meteo-archive",
       "detectorTimestamp": "2026-04-01T19:53:03.028473"
     }
   },
@@ -92,12 +108,12 @@
     "location": "Sudão do Sul",
     "country": "South Sudan",
     "region": "Africa",
-    "severity": "HIGH",
+    "severity": "MODERATE",
     "affected": 9690222,
     "piNeeded": 8721200000,
-    "piDistributed": 1465859296,
+    "piDistributed": 1046544000,
     "peopleHelped": 2076476,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.872 e enriquecimento climático em tempo quase real.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.872, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       7.0,
@@ -105,29 +121,37 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 35,
-      "humidity": 24,
-      "windSpeed": 5,
-      "drought": "HIGH"
+      "temperature": 32,
+      "humidity": 44,
+      "windSpeed": 10,
+      "drought": "LOW"
     },
-    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
     "analytics": {
-      "foodRiskScore": 0.825,
-      "climateStressScore": 0.694,
-      "operationalPriorityScore": 0.764,
-      "confidenceScore": 0.93,
-      "sourceModelVersion": "pfh-ml-pipeline-v2",
-      "computedAt": "2026-05-02T16:18:52.141672+00:00",
-      "precipitationAnomalyScore": 0.916,
-      "ndviProxy": 0.151
+      "foodRiskScore": 0.544,
+      "climateStressScore": 0.353,
+      "operationalPriorityScore": 0.434,
+      "confidenceScore": 0.98,
+      "sourceModelVersion": "pfh-ml-pipeline-v3",
+      "computedAt": "2026-05-13T20:52:49.635439+00:00",
+      "precipitationAnomalyScore": 0.0,
+      "thermalAnomalyScore": 0.111,
+      "dryDaysRatio": 0.833,
+      "ndviProxy": 0.709,
+      "recentPrecipitationMm": 27.9,
+      "baselinePrecipitationMm": 16.2,
+      "recentTemperatureMaxAvg": 36.74,
+      "baselineTemperatureMaxAvg": 35.85
     },
     "evidence": {
       "sources": [
         "detector",
-        "open-meteo"
+        "open-meteo-current",
+        "open-meteo-archive"
       ],
-      "evidenceHash": "cd858cd6b67eb3bf28e1c8b67a686af59c0b92bcbd41b5a893ef0783aaddefd3",
-      "weatherSource": "open-meteo",
+      "evidenceHash": "037439b41b38b5bad9306170ba8f336b5032a5a61f1d1e2e8d2ed5a0013fe895",
+      "weatherSource": "open-meteo-current",
+      "historicalClimateSource": "open-meteo-archive",
       "detectorTimestamp": "2026-04-01T19:53:03.028562"
     }
   },
@@ -136,12 +160,12 @@
     "location": "Afeganistão",
     "country": "Afghanistan",
     "region": "Asia",
-    "severity": "ELEVATED",
+    "severity": "HIGH",
     "affected": 7894111,
     "piNeeded": 7104700000,
-    "piDistributed": 997215692,
+    "piDistributed": 1139451786,
     "peopleHelped": 1691595,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.710 e enriquecimento climático em tempo quase real.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.710, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       33.9,
@@ -149,29 +173,37 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 3,
-      "humidity": 52,
-      "windSpeed": 8,
+      "temperature": 4,
+      "humidity": 42,
+      "windSpeed": 3,
       "drought": "MODERATE"
     },
-    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
     "analytics": {
-      "foodRiskScore": 0.659,
-      "climateStressScore": 0.473,
-      "operationalPriorityScore": 0.638,
-      "confidenceScore": 0.93,
-      "sourceModelVersion": "pfh-ml-pipeline-v2",
-      "computedAt": "2026-05-02T16:18:53.067269+00:00",
-      "precipitationAnomalyScore": 0.846,
-      "ndviProxy": 0.344
+      "foodRiskScore": 0.686,
+      "climateStressScore": 0.559,
+      "operationalPriorityScore": 0.729,
+      "confidenceScore": 0.98,
+      "sourceModelVersion": "pfh-ml-pipeline-v3",
+      "computedAt": "2026-05-13T20:52:50.626830+00:00",
+      "precipitationAnomalyScore": 0.672,
+      "thermalAnomalyScore": 1.0,
+      "dryDaysRatio": 0.767,
+      "ndviProxy": 0.265,
+      "recentPrecipitationMm": 23.9,
+      "baselinePrecipitationMm": 72.83,
+      "recentTemperatureMaxAvg": 11.64,
+      "baselineTemperatureMaxAvg": -0.34
     },
     "evidence": {
       "sources": [
         "detector",
-        "open-meteo"
+        "open-meteo-current",
+        "open-meteo-archive"
       ],
-      "evidenceHash": "125ee38d1811e9fb94fe51711f6cca33b85db3fab00238ac098d45eb5ae5a0d1",
-      "weatherSource": "open-meteo",
+      "evidenceHash": "e3298bf911129887a653cb7da2b41d755bad8f0dfc99b2c545d6100c7a7cae0b",
+      "weatherSource": "open-meteo-current",
+      "historicalClimateSource": "open-meteo-archive",
       "detectorTimestamp": "2026-04-01T19:53:03.028642"
     }
   },
@@ -180,12 +212,12 @@
     "location": "Haiti",
     "country": "Haiti",
     "region": "Caribbean",
-    "severity": "HIGH",
+    "severity": "MODERATE",
     "affected": 8312444,
     "piNeeded": 7481200000,
-    "piDistributed": 1158688256,
+    "piDistributed": 897744000,
     "peopleHelped": 1781238,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v2 com detector score 0.748 e enriquecimento climático em tempo quase real.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.748, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       18.9,
@@ -193,29 +225,37 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 34,
-      "humidity": 41,
-      "windSpeed": 7,
-      "drought": "MODERATE"
+      "temperature": 32,
+      "humidity": 49,
+      "windSpeed": 12,
+      "drought": "LOW"
     },
-    "news": "Pipeline enriched hotspot using detector + open-meteo climate inputs.",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
     "analytics": {
-      "foodRiskScore": 0.739,
-      "climateStressScore": 0.641,
-      "operationalPriorityScore": 0.704,
-      "confidenceScore": 0.93,
-      "sourceModelVersion": "pfh-ml-pipeline-v2",
-      "computedAt": "2026-05-02T16:18:54.005917+00:00",
-      "precipitationAnomalyScore": 0.904,
-      "ndviProxy": 0.212
+      "foodRiskScore": 0.484,
+      "climateStressScore": 0.341,
+      "operationalPriorityScore": 0.362,
+      "confidenceScore": 0.98,
+      "sourceModelVersion": "pfh-ml-pipeline-v3",
+      "computedAt": "2026-05-13T20:52:51.622785+00:00",
+      "precipitationAnomalyScore": 0.002,
+      "thermalAnomalyScore": 0.176,
+      "dryDaysRatio": 0.367,
+      "ndviProxy": 0.694,
+      "recentPrecipitationMm": 52.7,
+      "baselinePrecipitationMm": 52.83,
+      "recentTemperatureMaxAvg": 33.4,
+      "baselineTemperatureMaxAvg": 31.99
     },
     "evidence": {
       "sources": [
         "detector",
-        "open-meteo"
+        "open-meteo-current",
+        "open-meteo-archive"
       ],
-      "evidenceHash": "c4ef728745dc7392707dab4ba5b3109b14b6d51d9d59bbd4328d88b8cd5b9f6e",
-      "weatherSource": "open-meteo",
+      "evidenceHash": "7ff337e6c1c30c180c8ccf4442c55425153e53919ed9d66d71f3a21c7751c1c3",
+      "weatherSource": "open-meteo-current",
+      "historicalClimateSource": "open-meteo-archive",
       "detectorTimestamp": "2026-04-01T19:53:03.028723"
     }
   }

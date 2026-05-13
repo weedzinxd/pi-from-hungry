@@ -10,6 +10,7 @@ DEFAULT_DETECTOR_FILE = ROOT_DIR / 'backend-ia' / 'hotspots_detectados.json'
 DEFAULT_PIPELINE_FILE = ROOT_DIR / 'data' / 'curated-hotspots.json'
 DEFAULT_HISTORY_FILE = ROOT_DIR / 'data' / 'hotspot-history.json'
 DEFAULT_PI_PAYMENT_INTENTS_FILE = ROOT_DIR / 'data' / 'pi-payment-intents.json'
+DEFAULT_PIPELINE_AUDIT_FILE = ROOT_DIR / 'data' / 'pipeline-source-audit.json'
 
 
 class Settings(BaseSettings):
@@ -25,6 +26,7 @@ class Settings(BaseSettings):
     pipeline_data_file: Path = DEFAULT_PIPELINE_FILE
     history_data_file: Path = DEFAULT_HISTORY_FILE
     pi_payment_intents_file: Path = DEFAULT_PI_PAYMENT_INTENTS_FILE
+    pipeline_audit_file: Path = DEFAULT_PIPELINE_AUDIT_FILE
     api_hotspots_source: str = 'auto'
 
     model_config = SettingsConfigDict(

@@ -290,6 +290,13 @@ def get_data_sources():
             'deploymentFile': str(DEPLOYMENT_FILE),
             'available': DEPLOYMENT_FILE.exists(),
         },
+        pipeline={
+            'auditFile': str(settings.pipeline_audit_file),
+            'auditAvailable': settings.pipeline_audit_file.exists(),
+            'modelVersion': 'pfh-ml-pipeline-v3',
+            'currentClimateProvider': 'open-meteo-forecast',
+            'historicalClimateProvider': 'open-meteo-archive',
+        },
     )
 
 

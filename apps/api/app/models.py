@@ -110,6 +110,7 @@ class DataSourcesResponse(BaseModel):
     hotspots: dict[str, str]
     events: dict[str, str | bool]
     deployment: dict[str, str | bool]
+    pipeline: dict[str, str | bool]
 
 
 class PublicStatusResponse(BaseModel):

@@ -1,17 +1,23 @@
-# ML Pipeline v1
+# ML Pipeline v3
 
-Primeira versão do pipeline de hotspots com dados mais próximos do mundo real.
+Pipeline de hotspots com aquisição numérica mais forte e explicabilidade pública ampliada.
 
 ## O que faz
 - lê hotspots detectados em `backend-ia/hotspots_detectados.json`
-- enriquece cada hotspot com clima atual via Open-Meteo
+- enriquece cada hotspot com clima atual via Open-Meteo Forecast
+- busca janela histórica via Open-Meteo Archive para sinais matemáticos reais
 - calcula scores transparentes:
   - `foodRiskScore`
   - `climateStressScore`
   - `operationalPriorityScore`
   - `confidenceScore`
+  - `precipitationAnomalyScore`
+  - `thermalAnomalyScore`
+  - `dryDaysRatio`
+  - `ndviProxy`
 - exporta um dataset curado para `data/curated-hotspots.json`
 - atualiza histórico temporal em `data/hotspot-history.json`
+- gera auditoria de aquisição em `data/pipeline-source-audit.json`
 
 ## Executar
 ```bash
@@ -27,5 +33,6 @@ Quando `data/curated-hotspots.json` existir, a API prioriza esse arquivo.
 
 ## Observações
 - a camada de clima usa Open-Meteo sem chave
-- se a consulta externa falhar, o pipeline usa fallback controlado
-- a metodologia é transparente e extensível para NDVI, conflito e preços de alimentos
+- o pipeline combina forecast + archive para obter sinais numéricos mais confiáveis
+- se a consulta externa falhar, o pipeline usa fallbacks controlados e registra isso na auditoria
+- a metodologia é transparente e extensível para NDVI real, conflito e preços de alimentos

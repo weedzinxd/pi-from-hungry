@@ -12,12 +12,12 @@ const methodologyCards = [
   {
     icon: Database,
     title: 'Input layer',
-    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
+    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo Forecast', 'Janela histórica via Open-Meteo Archive', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
   },
   {
     icon: BrainCircuit,
     title: 'Scoring layer',
-    items: ['foodRiskScore', 'climateStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'ndviProxy'],
+    items: ['foodRiskScore', 'climateStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'thermalAnomalyScore', 'dryDaysRatio', 'ndviProxy'],
   },
   {
     icon: ShieldCheck,
@@ -41,7 +41,7 @@ export default function MethodologyPage() {
         <div className="mb-8 max-w-4xl">
           <div className="mb-3 flex flex-wrap gap-2">
             <StatusPill label="methodology" tone="success" />
-            <StatusPill label="pipeline v1" tone="neutral" />
+            <StatusPill label="pipeline v3" tone="neutral" />
           </div>
           <h1 className="text-4xl font-black md:text-5xl">Methodology & scoring</h1>
           <p className="mt-4 text-zinc-400">
@@ -73,19 +73,19 @@ export default function MethodologyPage() {
           <Panel>
             <PanelHeader title="Scoring atual" subtitle="Fórmula transparente da demo v1" />
             <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p>• climateStressScore combina temperatura, umidade inversa, vento, baixa precipitação e um proxy vegetal.</p>
-              <p>• precipitationAnomalyScore amplia a leitura de seca/irregularidade hídrica.</p>
-              <p>• ndviProxy funciona como aproximação transparente da cobertura/estresse vegetal até a integração de NDVI real.</p>
-              <p>• foodRiskScore combina detector score com climate stress e anomalia de precipitação.</p>
-              <p>• operationalPriorityScore combina risco alimentar com dificuldade climática/operacional.</p>
-              <p>• confidenceScore sobe quando temos clima externo válido, metadata conhecida e detector consistente.</p>
+              <p>• climateStressScore combina temperatura, umidade inversa, vento, baixa precipitação instantânea, anomalia histórica, fração de dias secos e um proxy vegetal.</p>
+              <p>• precipitationAnomalyScore agora usa janela matemática real: 30 dias recentes contra baseline equivalente de 90 dias.</p>
+              <p>• thermalAnomalyScore mede aquecimento recente contra a média histórica curta da própria coordenada.</p>
+              <p>• dryDaysRatio aumenta a sensibilidade quando a maior parte dos últimos dias teve precipitação baixa.</p>
+              <p>• ndviProxy continua transparente como aproximação até a integração de NDVI real.</p>
+              <p>• confidenceScore sobe quando temos clima atual + clima histórico + metadata conhecida + detector consistente.</p>
             </PanelBody>
           </Panel>
 
           <Panel>
             <PanelHeader title="Limitações honestas" subtitle="Importante para credibilidade pública" />
             <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p>• ainda não há NDVI, preços de alimentos ou conflito integrados nesta versão.</p>
+              <p>• ainda não há NDVI satelital real, preços de alimentos ou conflito integrados nesta versão.</p>
               <p>• a série temporal atual é inicial e será fortalecida com snapshots sucessivos do pipeline.</p>
               <p>• a demo não substitui sistemas humanitários oficiais.</p>
               <p>• o pipeline atual é um passo intermediário entre mock e inteligência operacional séria.</p>

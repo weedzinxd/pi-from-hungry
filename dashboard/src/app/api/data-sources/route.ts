@@ -18,6 +18,13 @@ export async function GET() {
         deploymentFile: string;
         available: boolean;
       };
+      pipeline: {
+        auditFile: string;
+        auditAvailable: boolean;
+        modelVersion: string;
+        currentClimateProvider: string;
+        historicalClimateProvider: string;
+      };
     }>('/data-sources');
 
     if (apiResponse) {
@@ -42,6 +49,13 @@ export async function GET() {
       deployment: {
         deploymentFile: './deployments/latest-deployment.json',
         available: false,
+      },
+      pipeline: {
+        auditFile: './data/pipeline-source-audit.json',
+        auditAvailable: false,
+        modelVersion: 'pfh-ml-pipeline-v3',
+        currentClimateProvider: 'open-meteo-forecast',
+        historicalClimateProvider: 'open-meteo-archive',
       },
     },
     { status: 200 },

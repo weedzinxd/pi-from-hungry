@@ -17,6 +17,13 @@ export interface DataSourcesResponse {
     deploymentFile: string;
     available: boolean;
   };
+  pipeline: {
+    auditFile: string;
+    auditAvailable: boolean;
+    modelVersion: string;
+    currentClimateProvider: string;
+    historicalClimateProvider: string;
+  };
 }
 
 async function fetchDataSources(): Promise<DataSourcesResponse> {
