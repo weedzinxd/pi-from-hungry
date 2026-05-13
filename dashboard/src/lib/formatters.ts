@@ -9,3 +9,7 @@ export function formatNumber(num: number): string {
 export function formatPercent(value: number): string {
   return `${(value * 100).toFixed(1)}%`;
 }
+
+export function formatInteger(num: number): string {
+  return new Intl.NumberFormat('pt-BR').format(Math.round(num));
+}

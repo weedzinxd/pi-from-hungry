@@ -12,5 +12,5 @@ export function StatusPill({
     neutral: 'border-zinc-700 bg-zinc-800/60 text-zinc-300',
   }[tone];
 
-  return <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${toneClass}`}>{label}</span>;
+  return <span className={`inline-flex min-h-6 items-center rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${toneClass}`}>{label}</span>;
 }
