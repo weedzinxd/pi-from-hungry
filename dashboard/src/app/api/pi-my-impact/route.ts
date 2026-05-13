@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { loadLocalPiUserImpact } from '@/lib/local-demo';
 import { getExternalApiBaseUrl } from '@/lib/server-api';
 
 export async function GET(request: NextRequest) {
   const username = request.nextUrl.searchParams.get('username') ?? '';
   const baseUrl = getExternalApiBaseUrl();
 
-  if (!baseUrl || !username) {
+  if (!username) {
     return NextResponse.json(
       {
         source: 'unavailable',
@@ -16,6 +17,10 @@ export async function GET(request: NextRequest) {
       },
       { status: 200 }
     );
+  }
+
+  if (!baseUrl) {
+    return NextResponse.json(await loadLocalPiUserImpact(username), { status: 200 });
   }
 
   const response = await fetch(`${baseUrl}/pi-payments/my-impact?username=${encodeURIComponent(username)}`, {

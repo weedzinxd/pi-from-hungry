@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalContractSummary, loadLocalPiPaymentsOverview, loadLocalProofs } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -51,17 +52,23 @@ export async function GET() {
     // fallback below
   }
 
+  const [summary, proofs, payments] = await Promise.all([
+    loadLocalContractSummary(),
+    loadLocalProofs(),
+    loadLocalPiPaymentsOverview(),
+  ]);
+
   return NextResponse.json({
-    source: 'unconfigured',
+    source: 'derived',
     totals: {
-      totalPiNeeded: 0,
-      totalPiDistributed: 0,
-      totalPeopleHelped: 0,
-      proofsCount: 0,
-      hotspotsCount: 0,
-      paymentIntents: 0,
-      paymentCompletedPi: 0,
-      paymentUniqueDonors: 0,
+      totalPiNeeded: summary.totals.totalPiNeeded,
+      totalPiDistributed: summary.totals.totalPiDistributed,
+      totalPeopleHelped: summary.totals.totalPeopleHelped,
+      proofsCount: proofs.proofs.length,
+      hotspotsCount: summary.totals.hotspots,
+      paymentIntents: payments.totals.intents,
+      paymentCompletedPi: payments.totals.completedPi,
+      paymentUniqueDonors: payments.totals.uniqueDonors,
     },
   });
 }

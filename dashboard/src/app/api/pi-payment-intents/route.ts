@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { loadLocalPiPaymentIntents } from '@/lib/local-demo';
 import { getExternalApiBaseUrl } from '@/lib/server-api';
 
-function unavailableList() {
-  return NextResponse.json({ source: 'unavailable', intents: [] }, { status: 200 });
+async function localList() {
+  return NextResponse.json({ source: 'file-store', intents: await loadLocalPiPaymentIntents() }, { status: 200 });
 }
 
 export async function GET() {
   const baseUrl = getExternalApiBaseUrl();
   if (!baseUrl) {
-    return unavailableList();
+    return localList();
   }
 
   const response = await fetch(`${baseUrl}/pi-payments/intents`, {
@@ -23,7 +24,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const baseUrl = getExternalApiBaseUrl();
   if (!baseUrl) {
-    return NextResponse.json({ detail: 'External API not configured for Pi payment intents.' }, { status: 503 });
+    return NextResponse.json({ detail: 'External API not configured. Public cloud demo is running in read-only mode today.' }, { status: 503 });
   }
 
   const payload = await request.json();

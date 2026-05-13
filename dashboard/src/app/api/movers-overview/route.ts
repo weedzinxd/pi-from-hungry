@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalMoversOverview } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -16,5 +17,5 @@ export async function GET() {
     // fallback below
   }
 
-  return NextResponse.json({ source: 'unavailable', topUp: [], topDown: [] }, { status: 200 });
+  return NextResponse.json(await loadLocalMoversOverview(), { status: 200 });
 }

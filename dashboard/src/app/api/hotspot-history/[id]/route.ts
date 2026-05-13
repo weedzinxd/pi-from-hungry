@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalHotspotHistory } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET(_: Request, context: { params: Promise<{ id: string }> }) {
@@ -25,5 +26,5 @@ export async function GET(_: Request, context: { params: Promise<{ id: string }>
     // fallback below
   }
 
-  return NextResponse.json({ hotspotId: id, source: 'unavailable', trend: 'stable', points: [] }, { status: 200 });
+  return NextResponse.json(await loadLocalHotspotHistory(id), { status: 200 });
 }

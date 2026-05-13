@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalAnalyticsOverview } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -37,5 +38,5 @@ export async function GET() {
     // fallback below
   }
 
-  return NextResponse.json({ source: 'unavailable', totals: { hotspots: 0, avgConfidence: 0, avgRisk: 0, avgPriority: 0, totalAffected: 0, totalPiNeeded: 0 }, ranking: [] }, { status: 200 });
+  return NextResponse.json(await loadLocalAnalyticsOverview(), { status: 200 });
 }

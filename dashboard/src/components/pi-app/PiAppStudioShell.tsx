@@ -23,6 +23,7 @@ import {
 import { usePiUserImpact } from '@/hooks/usePiUserImpact';
 import { useProofs } from '@/hooks/useProofs';
 import { usePublicStatus } from '@/hooks/usePublicStatus';
+import { dashboardConfig } from '@/lib/config';
 import { formatNumber, formatPercent } from '@/lib/formatters';
 
 export function PiAppStudioShell() {
@@ -83,6 +84,7 @@ export function PiAppStudioShell() {
   const pendingApproval = recentIntents.find((intent) => intent.status === 'pending_server_approval');
   const pendingCompletion = recentIntents.find((intent) => intent.status === 'approved');
   const latestIntent = recentIntents[0];
+  const readOnlyCloudMode = !dashboardConfig.apiUrl || dashboardConfig.apiUrl.includes('localhost:8080');
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-black text-white">
@@ -143,6 +145,11 @@ export function PiAppStudioShell() {
           <p className="mt-3 text-xs text-zinc-500">
             {authSession.data?.note ?? 'Esta verificação ainda é demo-safe e precisa de endurecimento server-side antes de uso real.'}
           </p>
+          {readOnlyCloudMode ? (
+            <p className="mt-2 rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-200">
+              Cloud demo em modo somente leitura: ótimo para apresentação pública hoje. O fluxo de criação/aprovação segue disponível localmente ou quando conectarmos um backend persistente.
+            </p>
+          ) : null}
         </div>
 
         <PiMiniAppOnboarding />
@@ -225,13 +232,14 @@ export function PiAppStudioShell() {
             <button
               type="button"
               onClick={handleCreateIntent}
-              disabled={!selectedHotspot || createPaymentIntent.isPending}
+              disabled={!selectedHotspot || createPaymentIntent.isPending || readOnlyCloudMode}
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <Wallet className="h-4 w-4" /> {createPaymentIntent.isPending ? 'Criando intent...' : 'Criar intent de doação'}
+              <Wallet className="h-4 w-4" /> {readOnlyCloudMode ? 'Read-only cloud demo' : createPaymentIntent.isPending ? 'Criando intent...' : 'Criar intent de doação'}
             </button>
             <p className="text-xs text-zinc-500">
               A intent criada entra em <span className="text-white">pending_server_approval</span>. Agora a demo já tem ações separadas para <span className="text-white">approve</span> e <span className="text-white">complete</span>.
+              {readOnlyCloudMode ? ' Na versão cloud de hoje, esta área fica travada em modo showcase/read-only.' : ''}
             </p>
             {createPaymentIntent.data ? (
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-200">
@@ -252,7 +260,7 @@ export function PiAppStudioShell() {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              disabled={!pendingApproval || approvePaymentIntent.isPending}
+              disabled={!pendingApproval || approvePaymentIntent.isPending || readOnlyCloudMode}
               onClick={() => pendingApproval && approvePaymentIntent.mutate(pendingApproval.paymentId)}
               className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm font-semibold text-yellow-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -260,7 +268,7 @@ export function PiAppStudioShell() {
             </button>
             <button
               type="button"
-              disabled={!pendingCompletion || completePaymentIntent.isPending}
+              disabled={!pendingCompletion || completePaymentIntent.isPending || readOnlyCloudMode}
               onClick={() => pendingCompletion && completePaymentIntent.mutate(pendingCompletion.paymentId)}
               className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -269,6 +277,7 @@ export function PiAppStudioShell() {
           </div>
           <p className="mt-3 text-xs text-zinc-500">
             Isso acelera a validação do fluxo no preview público até ligarmos os callbacks oficiais do Pi Payments.
+            {readOnlyCloudMode ? ' Hoje, em cloud, essa etapa fica desativada para evitar falsa sensação de produção.' : ''}
           </p>
         </div>
 

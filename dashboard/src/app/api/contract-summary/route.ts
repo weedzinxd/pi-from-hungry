@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalContractSummary } from '@/lib/local-demo';
 import { mockCrisisEvents } from '@/lib/mock-data';
 import { fetchExternalApi } from '@/lib/server-api';
 
@@ -24,18 +25,21 @@ export async function GET() {
     // Fallback below.
   }
 
+  const local = await loadLocalContractSummary();
   const totalPiNeeded = mockCrisisEvents.reduce((acc, item) => acc + item.piNeeded, 0);
   const totalPiDistributed = mockCrisisEvents.reduce((acc, item) => acc + item.piDistributed, 0);
   const totalPeopleHelped = mockCrisisEvents.reduce((acc, item) => acc + item.peopleHelped, 0);
 
   return NextResponse.json({
-    contractId,
-    source: contractId ? 'configured' : 'mock',
-    totals: {
-      hotspots: mockCrisisEvents.length,
-      totalPiNeeded,
-      totalPiDistributed,
-      totalPeopleHelped,
-    },
+    contractId: local.contractId || contractId,
+    source: local.totals.hotspots ? local.source : contractId ? 'configured' : 'mock',
+    totals: local.totals.hotspots
+      ? local.totals
+      : {
+          hotspots: mockCrisisEvents.length,
+          totalPiNeeded,
+          totalPiDistributed,
+          totalPeopleHelped,
+        },
   });
 }

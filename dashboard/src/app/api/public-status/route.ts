@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalPublicStatus } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -17,13 +18,5 @@ export async function GET() {
     // fallback below
   }
 
-  return NextResponse.json(
-    {
-      appName: 'Pi From Hungry',
-      network: { status: 'offline', latestLedger: 0 },
-      deployment: { contractId: '', source: 'unconfigured' },
-      data: { hotspotsSource: 'demo', indexedSnapshotAvailable: false, proofsCount: 0, hotspotsCount: 0 },
-    },
-    { status: 200 },
-  );
+  return NextResponse.json(await loadLocalPublicStatus(), { status: 200 });
 }

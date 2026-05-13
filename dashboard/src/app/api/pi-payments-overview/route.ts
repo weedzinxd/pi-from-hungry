@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalPiPaymentsOverview } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -22,8 +23,5 @@ export async function GET() {
     // fallback below
   }
 
-  return NextResponse.json({
-    source: 'unavailable',
-    totals: { intents: 0, approved: 0, completed: 0, totalPi: 0, completedPi: 0, uniqueDonors: 0 },
-  });
+  return NextResponse.json(await loadLocalPiPaymentsOverview(), { status: 200 });
 }
