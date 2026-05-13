@@ -44,7 +44,7 @@ export function OperationsDashboard() {
       <LeafletCSS />
       <AppHeader networkStatus={networkStatus} />
 
-      <main className="max-w-7xl mx-auto p-4">
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:py-8">
         {isLoading && events.length === 0 ? (
           <div className="mb-4 grid gap-3">
             <Skeleton className="h-24 w-full" />
@@ -58,12 +58,12 @@ export function OperationsDashboard() {
           contractSummary={contractSummary}
         />
 
-        <div className="mt-4 grid lg:grid-cols-2 gap-4">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <ContractSummaryPanel data={contractSummary} isLoading={isLoadingContractSummary} />
           <ContractEventsPanel data={contractEvents} isLoading={isLoadingContractEvents} />
         </div>
 
-        <div className="h-4" />
+        <div className="h-6" />
 
         <ImpactHero events={events} />
         <AnalyticsSummaryStrip />
@@ -94,7 +94,7 @@ export function OperationsDashboard() {
           </div>
         )}
 
-        <div className="mt-6 bg-zinc-900 rounded-xl border border-zinc-800 p-4">
+        <div className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900/95 p-5 shadow-[0_10px_35px_-20px_rgba(16,185,129,0.18)]">
           <div className="flex flex-wrap gap-2 justify-center">
             {['Pi Network', 'NASA FIRMS', 'Soroban', 'React Query', 'Next.js', 'FastAPI'].map((t) => (
               <span key={t} className="px-2 py-1 bg-emerald-500/10 text-emerald-400 text-xs rounded-full border border-emerald-500/30">

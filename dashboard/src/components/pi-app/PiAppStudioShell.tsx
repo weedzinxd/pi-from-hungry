@@ -10,6 +10,8 @@ import { PiMiniAppOnboarding } from '@/components/pi-app/PiMiniAppOnboarding';
 import { PiPaymentsFeedPanel } from '@/components/pi-app/PiPaymentsFeedPanel';
 import { PiPersonalTimeline } from '@/components/pi-app/PiPersonalTimeline';
 import { PiRecommendedActionPanel } from '@/components/pi-app/PiRecommendedActionPanel';
+import { PageHero } from '@/components/public/PageHero';
+import { SectionIntro } from '@/components/public/SectionIntro';
 import { useAnalyticsInsights } from '@/hooks/useAnalyticsInsights';
 import { useHotspots } from '@/hooks/useHotspots';
 import { usePiAuthSession } from '@/hooks/usePiAuthSession';
@@ -87,29 +89,33 @@ export function PiAppStudioShell() {
   const readOnlyCloudMode = !dashboardConfig.apiUrl || dashboardConfig.apiUrl.includes('localhost:8080');
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-black text-white">
-      <div className="border-b border-emerald-500/20 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.24),transparent_38%),linear-gradient(180deg,#0a0a0a_0%,#09090b_100%)] px-5 pb-6 pt-8">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-          <Smartphone className="h-3.5 w-3.5" /> Pi App Studio / mobile shell
-        </div>
-        <h1 className="text-3xl font-black leading-tight">Pi From Hungry inside the Pi app</h1>
-        <p className="mt-3 text-sm text-zinc-300">
-          Mini experiência mobile-first para App Studio com foco em transparência, hotspots críticos, autenticação Pi e fluxo demonstrativo de doações.
-        </p>
-
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4">
-            <p className="text-xs text-zinc-500">Hotspots ativos</p>
-            <p className="mt-2 text-2xl font-black text-white">{publicStatus?.data.hotspotsCount ?? hotspots?.length ?? 0}</p>
-          </div>
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4">
-            <p className="text-xs text-zinc-500">Proofs indexadas</p>
-            <p className="mt-2 text-2xl font-black text-white">{publicStatus?.data.proofsCount ?? proofs?.proofs.length ?? 0}</p>
-          </div>
-        </div>
+    <div className="mx-auto min-h-screen w-full max-w-5xl bg-black px-4 py-8 text-white sm:px-6 lg:px-8">
+      <div className="mb-8">
+        <PageHero
+          eyebrow="Pi mini-app"
+          title="Pi From Hungry inside the Pi app"
+          description="Mini experiência mobile-first para App Studio com foco em transparência, hotspots críticos, autenticação Pi e fluxo demonstrativo de doações."
+          pills={
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+              <Smartphone className="h-3.5 w-3.5" /> Pi App Studio / mobile shell
+            </div>
+          }
+          right={
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-zinc-800 bg-black/30 p-4">
+                <p className="text-xs text-zinc-500">Hotspots ativos</p>
+                <p className="mt-2 text-2xl font-black text-white">{publicStatus?.data.hotspotsCount ?? hotspots?.length ?? 0}</p>
+              </div>
+              <div className="rounded-2xl border border-zinc-800 bg-black/30 p-4">
+                <p className="text-xs text-zinc-500">Proofs indexadas</p>
+                <p className="mt-2 text-2xl font-black text-white">{publicStatus?.data.proofsCount ?? proofs?.proofs.length ?? 0}</p>
+              </div>
+            </div>
+          }
+        />
       </div>
 
-      <div className="flex-1 space-y-4 px-4 py-5">
+      <div className="space-y-4">
         <div id="session" className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
@@ -158,7 +164,9 @@ export function PiAppStudioShell() {
 
         <PiJourneyPanel verified={Boolean(authSession.data?.verified)} latestIntent={latestIntent} impact={impact.data} />
 
-        <div className="grid grid-cols-2 gap-3">
+        <SectionIntro title="Operational snapshot" description="Leitura rápida dos sinais mais importantes do mini-app antes de entrar no fluxo de doação e impacto pessoal." />
+
+        <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
             <div className="mb-2 flex items-center gap-2 text-yellow-400">
               <Flame className="h-4 w-4" />
@@ -319,6 +327,8 @@ export function PiAppStudioShell() {
           </Link>
         </div>
 
+        <SectionIntro title="Hotspots e evidências" description="A partir daqui, o mini-app passa a exibir contexto operacional, histórico pessoal e evidências públicas que ajudam no storytelling de impacto." />
+
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
           <div className="mb-3 flex items-center justify-between">
             <div>
@@ -382,7 +392,7 @@ export function PiAppStudioShell() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pb-4">
+        <div className="grid gap-3 pb-4 sm:grid-cols-2">
           <Link href="/comparison" className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm font-semibold text-white">
             Temporal comparison
           </Link>
@@ -393,7 +403,7 @@ export function PiAppStudioShell() {
             href="https://github.com/weedzinxd/pi-from-hungry"
             target="_blank"
             rel="noreferrer"
-            className="col-span-2 inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm font-semibold text-white"
+            className="sm:col-span-2 inline-flex items-center justify-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 text-sm font-semibold text-white"
           >
             GitHub / open source <ExternalLink className="h-4 w-4" />
           </a>
