@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Database, ShieldCheck, Signal, Wallet } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Database, FileStack, ShieldCheck, Signal, Wallet } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Panel, PanelBody, PanelHeader } from '@/components/ui/Panel';
@@ -29,8 +29,8 @@ const transparencyItems = [
   {
     icon: Database,
     title: 'Hotspots centralizados',
-    description: 'Os hotspots da demo estão centralizados em um arquivo de dados e servidos por uma API FastAPI.',
-    status: 'api-backed',
+    description: 'Os hotspots da demo estão centralizados em um arquivo de dados e servidos por uma API ou fallback standalone.',
+    status: 'resilient',
     tone: 'success' as const,
   },
   {
@@ -46,6 +46,37 @@ export default function TransparencyPage() {
   const { data: networkStatus } = useNetworkStatus();
   const { data: deploymentStatus } = useDeploymentStatus();
   const { data: dataSources } = useDataSources();
+
+  const transparencySnapshot = [
+    {
+      icon: Signal,
+      label: 'Network',
+      value: networkStatus?.status ?? 'offline',
+      helper: `ledger ${networkStatus?.latestLedger ?? 0}`,
+      color: 'text-emerald-400',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Deployment',
+      value: deploymentStatus?.source ?? 'unconfigured',
+      helper: deploymentStatus?.contractId ? 'contract linked' : 'contract pending',
+      color: 'text-cyan-400',
+    },
+    {
+      icon: Database,
+      label: 'Hotspots source',
+      value: dataSources?.hotspots.active ?? 'demo',
+      helper: dataSources?.events.indexedSnapshotAvailable ? 'indexed snapshot on' : 'indexed snapshot off',
+      color: 'text-yellow-400',
+    },
+    {
+      icon: FileStack,
+      label: 'Evidence layer',
+      value: dataSources?.deployment.available ? 'deployment file ready' : 'deployment file pending',
+      helper: dataSources?.hotspots.pipelineFile ? 'pipeline data connected' : 'pipeline pending',
+      color: 'text-emerald-300',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -67,16 +98,31 @@ export default function TransparencyPage() {
           <PublicStatusStrip />
         </div>
 
+        <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {transparencySnapshot.map((item) => (
+            <Panel key={item.label} className="bg-zinc-950/80">
+              <PanelBody className="p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <item.icon className={`h-5 w-5 ${item.color}`} />
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">{item.label}</span>
+                </div>
+                <p className={`text-lg font-bold ${item.color}`}>{item.value}</p>
+                <p className="mt-1 text-xs text-zinc-500">{item.helper}</p>
+              </PanelBody>
+            </Panel>
+          ))}
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {transparencyItems.map((item) => (
-            <Panel key={item.title}>
+            <Panel key={item.title} className="card-hover">
               <PanelBody className="p-6">
                 <item.icon className="mb-4 h-9 w-9 text-emerald-400" />
                 <div className="mb-3">
                   <StatusPill label={item.status} tone={item.tone} />
                 </div>
                 <h2 className="text-xl font-bold text-white">{item.title}</h2>
-                <p className="mt-3 text-sm text-zinc-400">{item.description}</p>
+                <p className="mt-3 text-sm leading-6 text-zinc-400">{item.description}</p>
               </PanelBody>
             </Panel>
           ))}
@@ -84,22 +130,36 @@ export default function TransparencyPage() {
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <Panel>
-            <PanelHeader title="Contrato e deployment" subtitle="Fonte usada pela demo" />
-            <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p><span className="text-zinc-500">Contract ID:</span> <span className="break-all text-white">{deploymentStatus?.contractId || 'não configurado'}</span></p>
-              <p><span className="text-zinc-500">Source:</span> <span className="text-white">{deploymentStatus?.source ?? 'n/a'}</span></p>
-              <p><span className="text-zinc-500">RPC:</span> <span className="break-all text-white">{deploymentStatus?.rpcUrl ?? 'n/a'}</span></p>
-              <p><span className="text-zinc-500">WASM:</span> <span className="break-all text-white">{deploymentStatus?.deployment?.wasmHash ?? 'n/a'}</span></p>
+            <PanelHeader title="Contrato e deployment" subtitle="Fonte usada pela demo" right={<CheckCircle2 className="h-4 w-4 text-emerald-400" />} />
+            <PanelBody className="grid gap-3 sm:grid-cols-2">
+              {[
+                { label: 'Contract ID', value: deploymentStatus?.contractId || 'não configurado', breakAll: true },
+                { label: 'Source', value: deploymentStatus?.source ?? 'n/a' },
+                { label: 'RPC', value: deploymentStatus?.rpcUrl ?? 'n/a', breakAll: true },
+                { label: 'WASM', value: deploymentStatus?.deployment?.wasmHash ?? 'n/a', breakAll: true },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">{item.label}</p>
+                  <p className={`mt-2 text-sm text-white ${item.breakAll ? 'break-all' : ''}`}>{item.value}</p>
+                </div>
+              ))}
             </PanelBody>
           </Panel>
 
           <Panel>
-            <PanelHeader title="Fontes de dados" subtitle="Base atual da demo" />
-            <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p><span className="text-zinc-500">Hotspots ativos:</span> <span className="text-white">{dataSources?.hotspots.active ?? 'demo'}</span></p>
-              <p><span className="text-zinc-500">Detector file:</span> <span className="break-all text-white">{dataSources?.hotspots.detectorFile ?? 'n/a'}</span></p>
-              <p><span className="text-zinc-500">Indexed snapshot:</span> <span className="text-white">{String(dataSources?.events.indexedSnapshotAvailable ?? false)}</span></p>
-              <p><span className="text-zinc-500">Deployment file:</span> <span className="break-all text-white">{dataSources?.deployment.deploymentFile ?? 'n/a'}</span></p>
+            <PanelHeader title="Fontes de dados" subtitle="Base atual da demo" right={<Database className="h-4 w-4 text-cyan-400" />} />
+            <PanelBody className="grid gap-3 sm:grid-cols-2">
+              {[
+                { label: 'Hotspots ativos', value: dataSources?.hotspots.active ?? 'demo' },
+                { label: 'Indexed snapshot', value: String(dataSources?.events.indexedSnapshotAvailable ?? false) },
+                { label: 'Detector file', value: dataSources?.hotspots.detectorFile ?? 'n/a', breakAll: true },
+                { label: 'Deployment file', value: dataSources?.deployment.deploymentFile ?? 'n/a', breakAll: true },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">{item.label}</p>
+                  <p className={`mt-2 text-sm text-white ${item.breakAll ? 'break-all' : ''}`}>{item.value}</p>
+                </div>
+              ))}
             </PanelBody>
           </Panel>
         </div>
@@ -107,33 +167,37 @@ export default function TransparencyPage() {
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           <Panel>
             <PanelHeader title="O que está funcional agora" subtitle="Bom para demonstração pública" />
-            <PanelBody>
-              <ul className="space-y-3 text-sm text-zinc-300">
-                <li>• Dashboard público com mapa, feed, painéis e KPIs.</li>
-                <li>• FastAPI servindo hotspots, resumo agregado e status operacional.</li>
-                <li>• Proxy do dashboard para API externa/local com fallback resiliente.</li>
-                <li>• Consulta ao Pi RPC para status da rede e uso de snapshot indexado para eventos quando disponível.</li>
-              </ul>
+            <PanelBody className="space-y-3">
+              {[
+                'Dashboard público com mapa, feed, painéis e KPIs.',
+                'Camada standalone/read-only para publicar a demo sem depender de backend externo hoje.',
+                'Proxy do dashboard para API externa/local com fallback resiliente.',
+                'Consulta ao Pi RPC para status da rede e uso de snapshot indexado para eventos quando disponível.',
+              ].map((item) => (
+                <div key={item} className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-sm text-zinc-300">• {item}</div>
+              ))}
             </PanelBody>
           </Panel>
 
           <Panel>
             <PanelHeader title="Próximos passos críticos" subtitle="Para aumentar credibilidade operacional" />
-            <PanelBody>
-              <ul className="space-y-3 text-sm text-zinc-300">
-                <li>• Evoluir o indexador simples atual para persistência contínua com banco e histórico completo.</li>
-                <li>• Ligar o fluxo de contrato Soroban real com assinatura e submissão.</li>
-                <li>• Substituir dados demo por pipeline de ingestão reproduzível.</li>
-                <li>• Adicionar provas públicas e histórico operacional por hotspot.</li>
-              </ul>
+            <PanelBody className="space-y-3">
+              {[
+                'Evoluir o indexador simples atual para persistência contínua com banco e histórico completo.',
+                'Ligar o fluxo de contrato Soroban real com assinatura e submissão.',
+                'Substituir dados demo por pipeline de ingestão reproduzível.',
+                'Adicionar provas públicas e histórico operacional por hotspot.',
+              ].map((item) => (
+                <div key={item} className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-sm text-zinc-300">• {item}</div>
+              ))}
             </PanelBody>
           </Panel>
         </div>
 
         <div className="mt-8">
           <Panel>
-            <PanelHeader title="Navegação rápida" subtitle="Rotas úteis para a apresentação" />
-            <PanelBody className="grid gap-3 md:grid-cols-3">
+            <PanelHeader title="Navegação rápida" subtitle="Rotas úteis para a apresentação" right={<ArrowRight className="h-4 w-4 text-emerald-400" />} />
+            <PanelBody className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {[
                 { href: '/dashboard', label: 'Abrir dashboard' },
                 { href: '/hotspots', label: 'Explorar hotspots' },
