@@ -23,6 +23,7 @@ export interface DataSourcesResponse {
     modelVersion: string;
     currentClimateProvider: string;
     historicalClimateProvider: string;
+    macroeconomicProvider: string;
   };
 }
 

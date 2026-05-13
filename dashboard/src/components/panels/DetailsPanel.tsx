@@ -58,6 +58,14 @@ export function DetailsPanel({ event }: { event: CrisisEvent | null }) {
               <p className="text-[10px] text-zinc-500">Confidence</p>
               <p className="text-sm font-bold text-emerald-400">{formatPercent(event.analytics.confidenceScore)}</p>
             </div>
+            <div className="bg-zinc-800/50 rounded p-2">
+              <p className="text-[10px] text-zinc-500">Economic stress</p>
+              <p className="text-sm font-bold text-orange-400">{formatPercent(event.analytics.economicStressScore ?? 0)}</p>
+            </div>
+            <div className="bg-zinc-800/50 rounded p-2">
+              <p className="text-[10px] text-zinc-500">Dry days</p>
+              <p className="text-sm font-bold text-cyan-400">{formatPercent(event.analytics.dryDaysRatio ?? 0)}</p>
+            </div>
           </div>
         ) : null}
         <div className="grid gap-2 sm:grid-cols-2">

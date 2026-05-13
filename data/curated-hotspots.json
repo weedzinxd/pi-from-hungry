@@ -7,9 +7,9 @@
     "severity": "ELEVATED",
     "affected": 9727888,
     "piNeeded": 8755100000,
-    "piDistributed": 1067071588,
+    "piDistributed": 1134485858,
     "peopleHelped": 2084547,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.876, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v4 com detector score 0.876, clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       14.5,
@@ -19,35 +19,41 @@
     "liveData": {
       "temperature": 37,
       "humidity": 17,
-      "windSpeed": 5,
+      "windSpeed": 6,
       "drought": "MODERATE"
     },
-    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs (open-meteo-current, open-meteo-archive, world-bank-open-data).",
     "analytics": {
-      "foodRiskScore": 0.626,
-      "climateStressScore": 0.519,
-      "operationalPriorityScore": 0.554,
+      "foodRiskScore": 0.654,
+      "climateStressScore": 0.517,
+      "economicStressScore": 0.698,
+      "operationalPriorityScore": 0.589,
       "confidenceScore": 0.98,
-      "sourceModelVersion": "pfh-ml-pipeline-v3",
-      "computedAt": "2026-05-13T20:52:47.648661+00:00",
+      "sourceModelVersion": "pfh-ml-pipeline-v4",
+      "computedAt": "2026-05-13T21:14:34.186343+00:00",
       "precipitationAnomalyScore": 0.0,
       "thermalAnomalyScore": 0.539,
       "dryDaysRatio": 0.933,
-      "ndviProxy": 0.537,
+      "ndviProxy": 0.539,
       "recentPrecipitationMm": 3.9,
       "baselinePrecipitationMm": 0.1,
       "recentTemperatureMaxAvg": 40.65,
-      "baselineTemperatureMaxAvg": 36.34
+      "baselineTemperatureMaxAvg": 36.34,
+      "gdpPerCapitaUsd": 937.29,
+      "inflationConsumerPricesPct": 5.49,
+      "macroReferenceYear": "2024"
     },
     "evidence": {
       "sources": [
         "detector",
         "open-meteo-current",
-        "open-meteo-archive"
+        "open-meteo-archive",
+        "world-bank-open-data"
       ],
-      "evidenceHash": "b4e991ef02c55677a75a5361721002f8a6b6ff6da3b5b506db83bc0ed5b1eca5",
+      "evidenceHash": "12b0fc6fc4ad9f852a2eee8b4b099f835da5fac5e3ba7e7df25da35f6481340a",
       "weatherSource": "open-meteo-current",
       "historicalClimateSource": "open-meteo-archive",
+      "macroeconomicSource": "world-bank-open-data",
       "detectorTimestamp": "2026-04-01T19:53:03.028292"
     }
   },
@@ -59,9 +65,9 @@
     "severity": "HIGH",
     "affected": 9661333,
     "piNeeded": 8695200000,
-    "piDistributed": 1622176512,
+    "piDistributed": 1568614079,
     "peopleHelped": 2070285,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.870, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v4 com detector score 0.870, clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       15.5,
@@ -69,37 +75,43 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 27,
-      "humidity": 33,
-      "windSpeed": 8,
-      "drought": "HIGH"
+      "temperature": 26,
+      "humidity": 37,
+      "windSpeed": 9,
+      "drought": "MODERATE"
     },
-    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs (open-meteo-current, open-meteo-archive, world-bank-open-data).",
     "analytics": {
-      "foodRiskScore": 0.816,
-      "climateStressScore": 0.657,
-      "operationalPriorityScore": 0.848,
+      "foodRiskScore": 0.799,
+      "climateStressScore": 0.649,
+      "economicStressScore": 0.731,
+      "operationalPriorityScore": 0.82,
       "confidenceScore": 0.98,
-      "sourceModelVersion": "pfh-ml-pipeline-v3",
-      "computedAt": "2026-05-13T20:52:48.639178+00:00",
+      "sourceModelVersion": "pfh-ml-pipeline-v4",
+      "computedAt": "2026-05-13T21:14:36.452516+00:00",
       "precipitationAnomalyScore": 1.0,
       "thermalAnomalyScore": 0.717,
       "dryDaysRatio": 1.0,
-      "ndviProxy": 0.171,
+      "ndviProxy": 0.178,
       "recentPrecipitationMm": 0.0,
       "baselinePrecipitationMm": 8.2,
       "recentTemperatureMaxAvg": 35.9,
-      "baselineTemperatureMaxAvg": 30.16
+      "baselineTemperatureMaxAvg": 30.16,
+      "gdpPerCapitaUsd": 633.89,
+      "inflationConsumerPricesPct": 8.1,
+      "macroReferenceYear": "2018"
     },
     "evidence": {
       "sources": [
         "detector",
         "open-meteo-current",
-        "open-meteo-archive"
+        "open-meteo-archive",
+        "world-bank-open-data"
       ],
-      "evidenceHash": "421e8bbdaae9e81a22eb1535895033331ea84d36502577157b3baf16a9cb5e4c",
+      "evidenceHash": "4bf9671fb6dc33be9592849cd9abecb4d75a22d2e2803d9fb3f117522d950a4c",
       "weatherSource": "open-meteo-current",
       "historicalClimateSource": "open-meteo-archive",
+      "macroeconomicSource": "world-bank-open-data",
       "detectorTimestamp": "2026-04-01T19:53:03.028473"
     }
   },
@@ -108,12 +120,12 @@
     "location": "Sudão do Sul",
     "country": "South Sudan",
     "region": "Africa",
-    "severity": "MODERATE",
+    "severity": "ELEVATED",
     "affected": 9690222,
     "piNeeded": 8721200000,
-    "piDistributed": 1046544000,
+    "piDistributed": 1085963824,
     "peopleHelped": 2076476,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.872, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v4 com detector score 0.872, clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       7.0,
@@ -121,19 +133,20 @@
     ],
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
-      "temperature": 32,
+      "temperature": 31,
       "humidity": 44,
-      "windSpeed": 10,
+      "windSpeed": 11,
       "drought": "LOW"
     },
-    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs (open-meteo-current, open-meteo-archive, world-bank-open-data).",
     "analytics": {
-      "foodRiskScore": 0.544,
-      "climateStressScore": 0.353,
-      "operationalPriorityScore": 0.434,
+      "foodRiskScore": 0.633,
+      "climateStressScore": 0.357,
+      "economicStressScore": 0.982,
+      "operationalPriorityScore": 0.566,
       "confidenceScore": 0.98,
-      "sourceModelVersion": "pfh-ml-pipeline-v3",
-      "computedAt": "2026-05-13T20:52:49.635439+00:00",
+      "sourceModelVersion": "pfh-ml-pipeline-v4",
+      "computedAt": "2026-05-13T21:14:38.232027+00:00",
       "precipitationAnomalyScore": 0.0,
       "thermalAnomalyScore": 0.111,
       "dryDaysRatio": 0.833,
@@ -141,17 +154,22 @@
       "recentPrecipitationMm": 27.9,
       "baselinePrecipitationMm": 16.2,
       "recentTemperatureMaxAvg": 36.74,
-      "baselineTemperatureMaxAvg": 35.85
+      "baselineTemperatureMaxAvg": 35.85,
+      "gdpPerCapitaUsd": 1080.15,
+      "inflationConsumerPricesPct": 91.44,
+      "macroReferenceYear": "2024"
     },
     "evidence": {
       "sources": [
         "detector",
         "open-meteo-current",
-        "open-meteo-archive"
+        "open-meteo-archive",
+        "world-bank-open-data"
       ],
-      "evidenceHash": "037439b41b38b5bad9306170ba8f336b5032a5a61f1d1e2e8d2ed5a0013fe895",
+      "evidenceHash": "8ed6d21cac1ed00981a7b2bca88f4612d97a269dd04cb1de317b7886adabb1c1",
       "weatherSource": "open-meteo-current",
       "historicalClimateSource": "open-meteo-archive",
+      "macroeconomicSource": "world-bank-open-data",
       "detectorTimestamp": "2026-04-01T19:53:03.028562"
     }
   },
@@ -163,9 +181,9 @@
     "severity": "HIGH",
     "affected": 7894111,
     "piNeeded": 7104700000,
-    "piDistributed": 1139451786,
+    "piDistributed": 1122258412,
     "peopleHelped": 1691595,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.710, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v4 com detector score 0.710, clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       33.9,
@@ -178,14 +196,15 @@
       "windSpeed": 3,
       "drought": "MODERATE"
     },
-    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs (open-meteo-current, open-meteo-archive, world-bank-open-data).",
     "analytics": {
-      "foodRiskScore": 0.686,
+      "foodRiskScore": 0.683,
       "climateStressScore": 0.559,
-      "operationalPriorityScore": 0.729,
+      "economicStressScore": 0.68,
+      "operationalPriorityScore": 0.718,
       "confidenceScore": 0.98,
-      "sourceModelVersion": "pfh-ml-pipeline-v3",
-      "computedAt": "2026-05-13T20:52:50.626830+00:00",
+      "sourceModelVersion": "pfh-ml-pipeline-v4",
+      "computedAt": "2026-05-13T21:14:39.417968+00:00",
       "precipitationAnomalyScore": 0.672,
       "thermalAnomalyScore": 1.0,
       "dryDaysRatio": 0.767,
@@ -193,17 +212,22 @@
       "recentPrecipitationMm": 23.9,
       "baselinePrecipitationMm": 72.83,
       "recentTemperatureMaxAvg": 11.64,
-      "baselineTemperatureMaxAvg": -0.34
+      "baselineTemperatureMaxAvg": -0.34,
+      "gdpPerCapitaUsd": 413.76,
+      "inflationConsumerPricesPct": -6.6,
+      "macroReferenceYear": "2024"
     },
     "evidence": {
       "sources": [
         "detector",
         "open-meteo-current",
-        "open-meteo-archive"
+        "open-meteo-archive",
+        "world-bank-open-data"
       ],
-      "evidenceHash": "e3298bf911129887a653cb7da2b41d755bad8f0dfc99b2c545d6100c7a7cae0b",
+      "evidenceHash": "a9ec299a83f92abe719621f2c2aec1130eff1668e354403bb1a9476675731d41",
       "weatherSource": "open-meteo-current",
       "historicalClimateSource": "open-meteo-archive",
+      "macroeconomicSource": "world-bank-open-data",
       "detectorTimestamp": "2026-04-01T19:53:03.028642"
     }
   },
@@ -217,7 +241,7 @@
     "piNeeded": 7481200000,
     "piDistributed": 897744000,
     "peopleHelped": 1781238,
-    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v3 com detector score 0.748, clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.",
+    "description": "Hotspot curado pelo pipeline pfh-ml-pipeline-v4 com detector score 0.748, clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.",
     "gvcActive": true,
     "coordinates": [
       18.9,
@@ -226,36 +250,42 @@
     "satelliteUrl": "https://firms.modaps.eosdis.nasa.gov/",
     "liveData": {
       "temperature": 32,
-      "humidity": 49,
-      "windSpeed": 12,
+      "humidity": 50,
+      "windSpeed": 13,
       "drought": "LOW"
     },
-    "news": "Pipeline enriched hotspot using detector + open numerical climate inputs (open-meteo-current, open-meteo-archive).",
+    "news": "Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs (open-meteo-current, open-meteo-archive, world-bank-open-data).",
     "analytics": {
-      "foodRiskScore": 0.484,
-      "climateStressScore": 0.341,
-      "operationalPriorityScore": 0.362,
+      "foodRiskScore": 0.552,
+      "climateStressScore": 0.337,
+      "economicStressScore": 0.822,
+      "operationalPriorityScore": 0.471,
       "confidenceScore": 0.98,
-      "sourceModelVersion": "pfh-ml-pipeline-v3",
-      "computedAt": "2026-05-13T20:52:51.622785+00:00",
+      "sourceModelVersion": "pfh-ml-pipeline-v4",
+      "computedAt": "2026-05-13T21:14:40.661469+00:00",
       "precipitationAnomalyScore": 0.002,
       "thermalAnomalyScore": 0.176,
       "dryDaysRatio": 0.367,
-      "ndviProxy": 0.694,
+      "ndviProxy": 0.696,
       "recentPrecipitationMm": 52.7,
       "baselinePrecipitationMm": 52.83,
       "recentTemperatureMaxAvg": 33.4,
-      "baselineTemperatureMaxAvg": 31.99
+      "baselineTemperatureMaxAvg": 31.99,
+      "gdpPerCapitaUsd": 2142.62,
+      "inflationConsumerPricesPct": 26.95,
+      "macroReferenceYear": "2024"
     },
     "evidence": {
       "sources": [
         "detector",
         "open-meteo-current",
-        "open-meteo-archive"
+        "open-meteo-archive",
+        "world-bank-open-data"
       ],
-      "evidenceHash": "7ff337e6c1c30c180c8ccf4442c55425153e53919ed9d66d71f3a21c7751c1c3",
+      "evidenceHash": "5b21ba850596696363a6f68c1085a44ce221e97c43bed5a0b6b78d5ba9f7877c",
       "weatherSource": "open-meteo-current",
       "historicalClimateSource": "open-meteo-archive",
+      "macroeconomicSource": "world-bank-open-data",
       "detectorTimestamp": "2026-04-01T19:53:03.028723"
     }
   }

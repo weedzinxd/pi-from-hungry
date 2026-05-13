@@ -12,12 +12,12 @@ const methodologyCards = [
   {
     icon: Database,
     title: 'Input layer',
-    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo Forecast', 'Janela histórica via Open-Meteo Archive', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
+    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo Forecast', 'Janela histórica via Open-Meteo Archive', 'Macroeconomia pública via World Bank Open Data', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
   },
   {
     icon: BrainCircuit,
     title: 'Scoring layer',
-    items: ['foodRiskScore', 'climateStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'thermalAnomalyScore', 'dryDaysRatio', 'ndviProxy'],
+    items: ['foodRiskScore', 'climateStressScore', 'economicStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'thermalAnomalyScore', 'dryDaysRatio', 'ndviProxy'],
   },
   {
     icon: ShieldCheck,
@@ -41,7 +41,7 @@ export default function MethodologyPage() {
         <div className="mb-8 max-w-4xl">
           <div className="mb-3 flex flex-wrap gap-2">
             <StatusPill label="methodology" tone="success" />
-            <StatusPill label="pipeline v3" tone="neutral" />
+            <StatusPill label="pipeline v4" tone="neutral" />
           </div>
           <h1 className="text-4xl font-black md:text-5xl">Methodology & scoring</h1>
           <p className="mt-4 text-zinc-400">
@@ -74,18 +74,19 @@ export default function MethodologyPage() {
             <PanelHeader title="Scoring atual" subtitle="Fórmula transparente da demo v1" />
             <PanelBody className="space-y-3 text-sm text-zinc-300">
               <p>• climateStressScore combina temperatura, umidade inversa, vento, baixa precipitação instantânea, anomalia histórica, fração de dias secos e um proxy vegetal.</p>
-              <p>• precipitationAnomalyScore agora usa janela matemática real: 30 dias recentes contra baseline equivalente de 90 dias.</p>
+              <p>• precipitationAnomalyScore usa janela matemática real: 30 dias recentes contra baseline equivalente de 90 dias.</p>
               <p>• thermalAnomalyScore mede aquecimento recente contra a média histórica curta da própria coordenada.</p>
+              <p>• economicStressScore adiciona vulnerabilidade pública via PIB per capita e inflação do World Bank.</p>
               <p>• dryDaysRatio aumenta a sensibilidade quando a maior parte dos últimos dias teve precipitação baixa.</p>
               <p>• ndviProxy continua transparente como aproximação até a integração de NDVI real.</p>
-              <p>• confidenceScore sobe quando temos clima atual + clima histórico + metadata conhecida + detector consistente.</p>
+              <p>• confidenceScore sobe quando temos clima atual + clima histórico + macroeconomia pública + metadata conhecida + detector consistente.</p>
             </PanelBody>
           </Panel>
 
           <Panel>
             <PanelHeader title="Limitações honestas" subtitle="Importante para credibilidade pública" />
             <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p>• ainda não há NDVI satelital real, preços de alimentos ou conflito integrados nesta versão.</p>
+              <p>• ainda não há NDVI satelital real, preços de alimentos dedicados ou conflito integrados nesta versão.</p>
               <p>• a série temporal atual é inicial e será fortalecida com snapshots sucessivos do pipeline.</p>
               <p>• a demo não substitui sistemas humanitários oficiais.</p>
               <p>• o pipeline atual é um passo intermediário entre mock e inteligência operacional séria.</p>

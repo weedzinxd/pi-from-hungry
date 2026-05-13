@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-05-13T20:52:46.542788+00:00",
-  "modelVersion": "pfh-ml-pipeline-v3",
+  "generatedAt": "2026-05-13T21:14:10.411616+00:00",
+  "modelVersion": "pfh-ml-pipeline-v4",
   "hotspotsCount": 5,
-  "durationMs": 5080.14,
+  "durationMs": 30249.98,
   "providers": {
     "detector": {
       "name": "backend-ia detector",
@@ -18,11 +18,21 @@
       "window": "30d recent vs 90d baseline",
       "successCount": 5,
       "fallbackCount": 0
+    },
+    "macroeconomics": {
+      "name": "World Bank Open Data",
+      "indicators": [
+        "NY.GDP.PCAP.CD",
+        "FP.CPI.TOTL.ZG"
+      ],
+      "successCount": 5,
+      "fallbackCount": 0
     }
   },
   "metrics": {
     "avgConfidenceScore": 0.98,
     "avgPrecipitationAnomalyScore": 0.335,
-    "avgThermalAnomalyScore": 0.509
+    "avgThermalAnomalyScore": 0.509,
+    "avgEconomicStressScore": 0.783
   }
 }

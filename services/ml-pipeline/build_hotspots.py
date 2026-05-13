@@ -19,33 +19,41 @@ HISTORY_FILE = ROOT_DIR / 'data' / 'hotspot-history.json'
 SOURCE_AUDIT_FILE = ROOT_DIR / 'data' / 'pipeline-source-audit.json'
 OPEN_METEO_FORECAST_URL = 'https://api.open-meteo.com/v1/forecast'
 OPEN_METEO_ARCHIVE_URL = 'https://archive-api.open-meteo.com/v1/archive'
-MODEL_VERSION = 'pfh-ml-pipeline-v3'
+WORLD_BANK_API_URL = 'https://api.worldbank.org/v2/country'
+WORLD_BANK_GDP_PER_CAPITA = 'NY.GDP.PCAP.CD'
+WORLD_BANK_INFLATION = 'FP.CPI.TOTL.ZG'
+MODEL_VERSION = 'pfh-ml-pipeline-v4'
 ARCHIVE_RECENT_DAYS = 30
 ARCHIVE_BASELINE_DAYS = 90
 
-REGION_METADATA: dict[str, dict[str, str]] = {
+REGION_METADATA: dict[str, dict[str, Any]] = {
     'Sahel, África': {
         'country': 'Mali, Niger, Burkina Faso',
+        'countryCodes': ['MLI', 'NER', 'BFA'],
         'region': 'Africa',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
     },
     'Iêmen': {
         'country': 'Yemen',
+        'countryCodes': ['YEM'],
         'region': 'Middle East',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
     },
     'Sudão do Sul': {
         'country': 'South Sudan',
+        'countryCodes': ['SSD'],
         'region': 'Africa',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
     },
     'Afeganistão': {
         'country': 'Afghanistan',
+        'countryCodes': ['AFG'],
         'region': 'Asia',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
     },
     'Haiti': {
         'country': 'Haiti',
+        'countryCodes': ['HTI'],
         'region': 'Caribbean',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
     },
@@ -70,7 +78,7 @@ def load_detector_hotspots() -> list[dict[str, Any]]:
     return data
 
 
-def fetch_json(url: str) -> dict[str, Any]:
+def fetch_json(url: str) -> Any:
     with urlopen(url, timeout=25) as response:
         return json.loads(response.read().decode('utf-8'))
 
@@ -110,6 +118,40 @@ def fetch_open_meteo_archive(latitude: float, longitude: float) -> dict[str, Any
     return fetch_json(f'{OPEN_METEO_ARCHIVE_URL}?{params}')
 
 
+def fetch_world_bank_indicator(country_codes: list[str], indicator: str) -> list[dict[str, Any]]:
+    joined_codes = ';'.join(country_codes)
+    params = urlencode({'format': 'json', 'per_page': 200})
+    response = fetch_json(f'{WORLD_BANK_API_URL}/{joined_codes}/indicator/{indicator}?{params}')
+    if not isinstance(response, list) or len(response) < 2 or not isinstance(response[1], list):
+        return []
+    return response[1]
+
+
+def latest_indicator_average(entries: list[dict[str, Any]]) -> tuple[float | None, str | None, int]:
+    grouped: dict[str, tuple[int, float]] = {}
+    for item in entries:
+        country = str((item.get('country') or {}).get('id') or item.get('countryiso3code') or '')
+        value = item.get('value')
+        year = item.get('date')
+        if not country or value is None or year is None:
+            continue
+        try:
+            numeric_value = float(value)
+            numeric_year = int(str(year))
+        except (TypeError, ValueError):
+            continue
+        current = grouped.get(country)
+        if current is None or numeric_year > current[0]:
+            grouped[country] = (numeric_year, numeric_value)
+
+    if not grouped:
+        return None, None, 0
+
+    values = [value for _, value in grouped.values()]
+    years = [year for year, _ in grouped.values()]
+    return mean(values), str(max(years)), len(values)
+
+
 def fallback_weather(latitude: float, longitude: float, score: float) -> dict[str, Any]:
     base_temp = 27 + int(abs(latitude) % 8)
     base_humidity = 30 + int(abs(longitude) % 30)
@@ -138,6 +180,18 @@ def fallback_archive(latitude: float, longitude: float, score: float, current_te
         'dry_days_ratio': dry_days_ratio,
         'sample_size_days': ARCHIVE_RECENT_DAYS + ARCHIVE_BASELINE_DAYS,
         'source': 'fallback-archive',
+    }
+
+
+def fallback_socioeconomics(detector_score: float, country_codes: list[str]) -> dict[str, Any]:
+    gdp_per_capita = round(max(450.0, 2200.0 - (detector_score * 1400.0) - (len(country_codes) * 70.0)), 2)
+    inflation_rate = round(6.0 + (detector_score * 14.0), 2)
+    return {
+        'gdp_per_capita_usd': gdp_per_capita,
+        'inflation_consumer_prices_pct': inflation_rate,
+        'reference_year': None,
+        'coverage': 0,
+        'source': 'fallback-world-bank',
     }
 
 
@@ -180,6 +234,23 @@ def normalize_archive_payload(raw: dict[str, Any], fallback: dict[str, Any]) -> 
         'dry_days_ratio': round(sum(1 for value in recent_precip if value < 1.0) / len(recent_precip), 3),
         'sample_size_days': len(precip),
         'source': 'open-meteo-archive',
+    }
+
+
+def normalize_socioeconomics_payload(gdp_entries: list[dict[str, Any]], inflation_entries: list[dict[str, Any]], fallback: dict[str, Any]) -> dict[str, Any]:
+    gdp_value, gdp_year, gdp_coverage = latest_indicator_average(gdp_entries)
+    inflation_value, inflation_year, inflation_coverage = latest_indicator_average(inflation_entries)
+
+    if gdp_value is None or inflation_value is None:
+        return fallback
+
+    numeric_years = [int(year) for year in [gdp_year, inflation_year] if year]
+    return {
+        'gdp_per_capita_usd': round(gdp_value, 2),
+        'inflation_consumer_prices_pct': round(inflation_value, 2),
+        'reference_year': str(max(numeric_years)) if numeric_years else None,
+        'coverage': min(gdp_coverage, inflation_coverage),
+        'source': 'world-bank-open-data',
     }
 
 
@@ -227,6 +298,17 @@ def derive_climate_signals(weather: dict[str, Any], archive: dict[str, Any]) -> 
     }
 
 
+def derive_economic_signals(socioeconomics: dict[str, Any]) -> dict[str, float]:
+    gdp_inverse = 1 - scale(float(socioeconomics['gdp_per_capita_usd']), 700, 15000)
+    inflation_score = scale(float(socioeconomics['inflation_consumer_prices_pct']), 2, 40)
+    economic_stress = clamp((gdp_inverse * 0.68) + (inflation_score * 0.32))
+    return {
+        'gdpInverseScore': round(gdp_inverse, 3),
+        'inflationScore': round(inflation_score, 3),
+        'economicStressScore': round(economic_stress, 3),
+    }
+
+
 def derive_drought_label(climate_stress: float) -> str:
     if climate_stress >= 0.8:
         return 'EXTREME'
@@ -247,31 +329,36 @@ def severity_from_priority(priority: float) -> str:
     return 'MODERATE'
 
 
-def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict[str, Any], metadata_known: bool) -> dict[str, float | str]:
+def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict[str, Any], socioeconomics: dict[str, Any], metadata_known: bool) -> dict[str, float | str]:
     climate_signals = derive_climate_signals(weather, archive)
+    economic_signals = derive_economic_signals(socioeconomics)
     climate_stress = float(climate_signals['climateStressScore'])
     precipitation_anomaly = float(climate_signals['precipitationAnomalyScore'])
     thermal_anomaly = float(climate_signals['thermalAnomalyScore'])
     dry_days_ratio = float(climate_signals['dryDaysRatio'])
     ndvi_proxy = float(climate_signals['ndviProxy'])
+    economic_stress = float(economic_signals['economicStressScore'])
 
-    food_risk = clamp((detector_score * 0.5) + (climate_stress * 0.28) + (precipitation_anomaly * 0.14) + (thermal_anomaly * 0.08))
-    operational_priority = clamp((food_risk * 0.56) + (precipitation_anomaly * 0.12) + (dry_days_ratio * 0.1) + ((1 - ndvi_proxy) * 0.12) + (thermal_anomaly * 0.1))
+    food_risk = clamp((detector_score * 0.44) + (climate_stress * 0.24) + (economic_stress * 0.16) + (precipitation_anomaly * 0.1) + (thermal_anomaly * 0.06))
+    operational_priority = clamp((food_risk * 0.48) + (economic_stress * 0.16) + (precipitation_anomaly * 0.1) + (dry_days_ratio * 0.08) + ((1 - ndvi_proxy) * 0.1) + (thermal_anomaly * 0.08))
 
-    confidence = 0.52
+    confidence = 0.48
     if weather['source'] == 'open-meteo-current':
-        confidence += 0.15
+        confidence += 0.14
     if archive['source'] == 'open-meteo-archive':
-        confidence += 0.13
-    if metadata_known:
+        confidence += 0.12
+    if socioeconomics['source'] == 'world-bank-open-data':
         confidence += 0.1
-    if detector_score > 0:
+    if metadata_known:
         confidence += 0.08
+    if detector_score > 0:
+        confidence += 0.06
     confidence = clamp(confidence, 0.0, 0.98)
 
     return {
         'foodRiskScore': round(food_risk, 3),
         'climateStressScore': round(climate_stress, 3),
+        'economicStressScore': round(economic_stress, 3),
         'operationalPriorityScore': round(operational_priority, 3),
         'confidenceScore': round(confidence, 3),
         'precipitationAnomalyScore': round(precipitation_anomaly, 3),
@@ -288,14 +375,17 @@ def evidence_hash(payload: dict[str, Any]) -> str:
     return hashlib.sha256(serialized.encode('utf-8')).hexdigest()
 
 
-def build_enriched_context(latitude: float, longitude: float, detector_score: float) -> tuple[dict[str, Any], dict[str, Any]]:
+def build_enriched_context(latitude: float, longitude: float, detector_score: float, country_codes: list[str]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     fallback_current = fallback_weather(latitude, longitude, detector_score)
     weather: dict[str, Any]
     archive: dict[str, Any]
+    socioeconomics: dict[str, Any]
 
-    with ThreadPoolExecutor(max_workers=2) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         current_future = executor.submit(fetch_open_meteo_current, latitude, longitude)
         archive_future = executor.submit(fetch_open_meteo_archive, latitude, longitude)
+        gdp_future = executor.submit(fetch_world_bank_indicator, country_codes, WORLD_BANK_GDP_PER_CAPITA)
+        inflation_future = executor.submit(fetch_world_bank_indicator, country_codes, WORLD_BANK_INFLATION)
 
         try:
             weather = normalize_weather_payload(current_future.result(), fallback_current)
@@ -308,7 +398,13 @@ def build_enriched_context(latitude: float, longitude: float, detector_score: fl
         except Exception:
             archive = fallback_hist
 
-    return weather, archive
+        fallback_social = fallback_socioeconomics(detector_score, country_codes)
+        try:
+            socioeconomics = normalize_socioeconomics_payload(gdp_future.result(), inflation_future.result(), fallback_social)
+        except Exception:
+            socioeconomics = fallback_social
+
+    return weather, archive, socioeconomics
 
 
 def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -323,6 +419,8 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         'fallbackCurrent': 0,
         'openMeteoArchive': 0,
         'fallbackArchive': 0,
+        'worldBank': 0,
+        'fallbackWorldBank': 0,
     }
 
     for index, item in enumerate(detector_hotspots):
@@ -332,12 +430,14 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         detector_score = float(item.get('score_fome', 0.5))
         estimated_pi = int(round(float(item.get('estimativa_custo_pi', 0)) * 10_000_000))
         metadata = REGION_METADATA.get(region_name, {})
+        country_codes = list(metadata.get('countryCodes', ['WLD']))
 
-        weather, archive = build_enriched_context(latitude, longitude, detector_score)
+        weather, archive, socioeconomics = build_enriched_context(latitude, longitude, detector_score, country_codes)
         provider_counts['openMeteoCurrent' if weather['source'] == 'open-meteo-current' else 'fallbackCurrent'] += 1
         provider_counts['openMeteoArchive' if archive['source'] == 'open-meteo-archive' else 'fallbackArchive'] += 1
+        provider_counts['worldBank' if socioeconomics['source'] == 'world-bank-open-data' else 'fallbackWorldBank'] += 1
 
-        scores = compute_scores(detector_score, weather, archive, bool(metadata))
+        scores = compute_scores(detector_score, weather, archive, socioeconomics, bool(metadata))
         affected = int(max(75_000, estimated_pi // 900))
         people_helped = int(max(10_000, estimated_pi // 4200))
         distributed = int(estimated_pi * clamp(float(scores['operationalPriorityScore']) * 0.22, 0.12, 0.35))
@@ -346,6 +446,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
             'detector': item,
             'weather': weather,
             'archive': archive,
+            'socioeconomics': socioeconomics,
             'scores': scores,
             'modelVersion': MODEL_VERSION,
         }
@@ -364,7 +465,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                 'peopleHelped': people_helped,
                 'description': (
                     f'Hotspot curado pelo pipeline {MODEL_VERSION} com detector score {detector_score:.3f}, '
-                    'clima atual e janela histórica de precipitação/temperatura para explicabilidade matemática maior.'
+                    'clima atual, histórico climático e vulnerabilidade macroeconômica pública para explicabilidade matemática maior.'
                 ),
                 'gvcActive': True,
                 'coordinates': [latitude, longitude],
@@ -376,12 +477,13 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     'drought': scores['droughtLabel'],
                 },
                 'news': (
-                    'Pipeline enriched hotspot using detector + open numerical climate inputs '
-                    f'({weather["source"]}, {archive["source"]}).'
+                    'Pipeline enriched hotspot using detector + open numerical climate + macroeconomic inputs '
+                    f'({weather["source"]}, {archive["source"]}, {socioeconomics["source"]}).'
                 ),
                 'analytics': {
                     'foodRiskScore': scores['foodRiskScore'],
                     'climateStressScore': scores['climateStressScore'],
+                    'economicStressScore': scores['economicStressScore'],
                     'operationalPriorityScore': scores['operationalPriorityScore'],
                     'confidenceScore': scores['confidenceScore'],
                     'sourceModelVersion': MODEL_VERSION,
@@ -394,12 +496,16 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     'baselinePrecipitationMm': round(float(archive['baseline_precipitation_mm']), 2),
                     'recentTemperatureMaxAvg': round(float(archive['recent_temperature_max_avg']), 2),
                     'baselineTemperatureMaxAvg': round(float(archive['baseline_temperature_max_avg']), 2),
+                    'gdpPerCapitaUsd': round(float(socioeconomics['gdp_per_capita_usd']), 2),
+                    'inflationConsumerPricesPct': round(float(socioeconomics['inflation_consumer_prices_pct']), 2),
+                    'macroReferenceYear': socioeconomics['reference_year'] or 'n/a',
                 },
                 'evidence': {
-                    'sources': ['detector', weather['source'], archive['source']],
+                    'sources': ['detector', weather['source'], archive['source'], socioeconomics['source']],
                     'evidenceHash': evidence_hash(evidence_payload),
                     'weatherSource': weather['source'],
                     'historicalClimateSource': archive['source'],
+                    'macroeconomicSource': socioeconomics['source'],
                     'detectorTimestamp': item.get('timestamp'),
                 },
             }
@@ -409,6 +515,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     avg_confidence = round(mean(float(item['analytics']['confidenceScore']) for item in curated), 3) if curated else 0.0
     avg_precip_anomaly = round(mean(float(item['analytics']['precipitationAnomalyScore']) for item in curated), 3) if curated else 0.0
     avg_thermal_anomaly = round(mean(float(item['analytics']['thermalAnomalyScore']) for item in curated), 3) if curated else 0.0
+    avg_economic_stress = round(mean(float(item['analytics']['economicStressScore']) for item in curated), 3) if curated else 0.0
 
     audit = {
         'generatedAt': started_at.isoformat(),
@@ -428,11 +535,18 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                 'successCount': provider_counts['openMeteoArchive'],
                 'fallbackCount': provider_counts['fallbackArchive'],
             },
+            'macroeconomics': {
+                'name': 'World Bank Open Data',
+                'indicators': [WORLD_BANK_GDP_PER_CAPITA, WORLD_BANK_INFLATION],
+                'successCount': provider_counts['worldBank'],
+                'fallbackCount': provider_counts['fallbackWorldBank'],
+            },
         },
         'metrics': {
             'avgConfidenceScore': avg_confidence,
             'avgPrecipitationAnomalyScore': avg_precip_anomaly,
             'avgThermalAnomalyScore': avg_thermal_anomaly,
+            'avgEconomicStressScore': avg_economic_stress,
         },
     }
     return curated, audit
