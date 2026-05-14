@@ -293,10 +293,11 @@ def get_data_sources():
         pipeline={
             'auditFile': str(settings.pipeline_audit_file),
             'auditAvailable': settings.pipeline_audit_file.exists(),
-            'modelVersion': 'pfh-ml-pipeline-v4',
+            'modelVersion': 'pfh-ml-pipeline-v5',
             'currentClimateProvider': 'open-meteo-forecast',
             'historicalClimateProvider': 'open-meteo-archive',
             'macroeconomicProvider': 'world-bank-open-data',
+            'cacheLayer': 'local-json-http-cache',
         },
     )
 

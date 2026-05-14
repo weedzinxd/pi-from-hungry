@@ -1,12 +1,24 @@
 {
-  "generatedAt": "2026-05-13T21:14:10.411616+00:00",
-  "modelVersion": "pfh-ml-pipeline-v4",
+  "generatedAt": "2026-05-14T12:10:50.657415+00:00",
+  "modelVersion": "pfh-ml-pipeline-v5",
   "hotspotsCount": 5,
-  "durationMs": 30249.98,
+  "durationMs": 6529.05,
   "providers": {
     "detector": {
       "name": "backend-ia detector",
       "records": 5
+    },
+    "cache": {
+      "file": "/home/weedzinx/pi-from-hungry/data/pipeline-http-cache.json",
+      "ttlHours": {
+        "current": 6,
+        "archive": 72,
+        "world_bank": 336
+      },
+      "hits": 0,
+      "misses": 20,
+      "writes": 20,
+      "entries": 20
     },
     "currentClimate": {
       "name": "Open-Meteo forecast",
@@ -31,8 +43,8 @@
   },
   "metrics": {
     "avgConfidenceScore": 0.98,
-    "avgPrecipitationAnomalyScore": 0.335,
-    "avgThermalAnomalyScore": 0.509,
+    "avgPrecipitationAnomalyScore": 0.344,
+    "avgThermalAnomalyScore": 0.513,
     "avgEconomicStressScore": 0.783
   }
 }

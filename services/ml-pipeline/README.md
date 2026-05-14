@@ -1,6 +1,6 @@
-# ML Pipeline v4
+# ML Pipeline v5
 
-Pipeline de hotspots com aquisição numérica mais forte, clima histórico e vulnerabilidade macroeconômica pública.
+Pipeline de hotspots com aquisição numérica mais forte, clima histórico, vulnerabilidade macroeconômica pública e cache local de coleta.
 
 ## O que faz
 - lê hotspots detectados em `backend-ia/hotspots_detectados.json`
@@ -20,6 +20,7 @@ Pipeline de hotspots com aquisição numérica mais forte, clima histórico e vu
 - exporta um dataset curado para `data/curated-hotspots.json`
 - atualiza histórico temporal em `data/hotspot-history.json`
 - gera auditoria de aquisição em `data/pipeline-source-audit.json`
+- mantém cache local de requisições em `data/pipeline-http-cache.json`
 
 ## Executar
 ```bash
@@ -37,5 +38,6 @@ Quando `data/curated-hotspots.json` existir, a API prioriza esse arquivo.
 - a camada de clima usa Open-Meteo sem chave
 - o pipeline combina forecast + archive para obter sinais climáticos numéricos mais confiáveis
 - a camada macroeconômica usa PIB per capita e inflação pública do World Bank Open Data
+- o pipeline usa cache local com TTL por provider para acelerar rebuilds e reduzir atrito operacional
 - se a consulta externa falhar, o pipeline usa fallbacks controlados e registra isso na auditoria
 - a metodologia é transparente e extensível para NDVI real, conflito e preços de alimentos

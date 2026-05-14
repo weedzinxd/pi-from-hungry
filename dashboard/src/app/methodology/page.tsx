@@ -1,6 +1,6 @@
 'use client';
 
-import { Beaker, BrainCircuit, Database, ShieldCheck } from 'lucide-react';
+import { Beaker, BrainCircuit, Database, ShieldCheck, Zap } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
@@ -27,7 +27,7 @@ const methodologyCards = [
   {
     icon: Beaker,
     title: 'Next layer',
-    items: ['NDVI real e anomalias climáticas', 'séries históricas', 'camada de conflito', 'ranking analítico, movers e metodologia pública expandida'],
+    items: ['NDVI real e anomalias climáticas', 'preços públicos de alimentos', 'camada de conflito', 'ranking analítico, movers e metodologia pública expandida'],
   },
 ];
 
@@ -41,7 +41,7 @@ export default function MethodologyPage() {
         <div className="mb-8 max-w-4xl">
           <div className="mb-3 flex flex-wrap gap-2">
             <StatusPill label="methodology" tone="success" />
-            <StatusPill label="pipeline v4" tone="neutral" />
+            <StatusPill label="pipeline v5" tone="neutral" />
           </div>
           <h1 className="text-4xl font-black md:text-5xl">Methodology & scoring</h1>
           <p className="mt-4 text-zinc-400">
@@ -91,6 +91,17 @@ export default function MethodologyPage() {
               <p>• a demo não substitui sistemas humanitários oficiais.</p>
               <p>• o pipeline atual é um passo intermediário entre mock e inteligência operacional séria.</p>
               <p>• o objetivo é evoluir para uma camada reproduzível, auditável e publicamente explicável.</p>
+            </PanelBody>
+          </Panel>
+        </div>
+
+        <div className="mt-8">
+          <Panel>
+            <PanelHeader title="Aquisição moderna" subtitle="Como a coleta ficou mais robusta" right={<Zap className="h-4 w-4 text-cyan-400" />} />
+            <PanelBody className="grid gap-3 md:grid-cols-3 text-sm text-zinc-300">
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">• cache local JSON para reduzir chamadas repetidas e acelerar rebuilds</div>
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">• TTL diferente para clima atual, histórico e macroeconomia pública</div>
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">• auditoria pública registra hits, misses e providers usados</div>
             </PanelBody>
           </Panel>
         </div>

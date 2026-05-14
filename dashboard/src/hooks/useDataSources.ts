@@ -24,6 +24,7 @@ export interface DataSourcesResponse {
     currentClimateProvider: string;
     historicalClimateProvider: string;
     macroeconomicProvider: string;
+    cacheLayer: string;
   };
 }
 

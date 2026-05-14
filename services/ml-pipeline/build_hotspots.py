@@ -17,14 +17,20 @@ DETECTOR_FILE = ROOT_DIR / 'backend-ia' / 'hotspots_detectados.json'
 OUTPUT_FILE = ROOT_DIR / 'data' / 'curated-hotspots.json'
 HISTORY_FILE = ROOT_DIR / 'data' / 'hotspot-history.json'
 SOURCE_AUDIT_FILE = ROOT_DIR / 'data' / 'pipeline-source-audit.json'
+CACHE_FILE = ROOT_DIR / 'data' / 'pipeline-http-cache.json'
 OPEN_METEO_FORECAST_URL = 'https://api.open-meteo.com/v1/forecast'
 OPEN_METEO_ARCHIVE_URL = 'https://archive-api.open-meteo.com/v1/archive'
 WORLD_BANK_API_URL = 'https://api.worldbank.org/v2/country'
 WORLD_BANK_GDP_PER_CAPITA = 'NY.GDP.PCAP.CD'
 WORLD_BANK_INFLATION = 'FP.CPI.TOTL.ZG'
-MODEL_VERSION = 'pfh-ml-pipeline-v4'
+MODEL_VERSION = 'pfh-ml-pipeline-v5'
 ARCHIVE_RECENT_DAYS = 30
 ARCHIVE_BASELINE_DAYS = 90
+CACHE_TTL_HOURS = {
+    'current': 6,
+    'archive': 72,
+    'world_bank': 24 * 14,
+}
 
 REGION_METADATA: dict[str, dict[str, Any]] = {
     'Sahel, África': {
@@ -78,9 +84,54 @@ def load_detector_hotspots() -> list[dict[str, Any]]:
     return data
 
 
-def fetch_json(url: str) -> Any:
+def load_http_cache() -> dict[str, dict[str, Any]]:
+    if not CACHE_FILE.exists():
+        return {}
+    try:
+        raw = json.loads(CACHE_FILE.read_text(encoding='utf-8'))
+    except Exception:
+        return {}
+    return raw if isinstance(raw, dict) else {}
+
+
+HTTP_CACHE = load_http_cache()
+CACHE_STATS = {
+    'hits': 0,
+    'misses': 0,
+    'writes': 0,
+}
+
+
+def save_http_cache() -> None:
+    CACHE_FILE.write_text(json.dumps(HTTP_CACHE, indent=2, ensure_ascii=False), encoding='utf-8')
+
+
+def fetch_json(url: str, cache_namespace: str | None = None, ttl_hours: int | None = None) -> Any:
+    cache_key = f'{cache_namespace}:{url}' if cache_namespace else url
+    if cache_namespace and ttl_hours is not None:
+        cached = HTTP_CACHE.get(cache_key)
+        if cached:
+            cached_at_raw = cached.get('cachedAt')
+            try:
+                cached_at = datetime.fromisoformat(str(cached_at_raw).replace('Z', '+00:00'))
+                age_seconds = (datetime.now(timezone.utc) - cached_at).total_seconds()
+                if age_seconds <= ttl_hours * 3600:
+                    CACHE_STATS['hits'] += 1
+                    return cached.get('payload')
+            except Exception:
+                pass
+
     with urlopen(url, timeout=25) as response:
-        return json.loads(response.read().decode('utf-8'))
+        payload = json.loads(response.read().decode('utf-8'))
+
+    if cache_namespace and ttl_hours is not None:
+        HTTP_CACHE[cache_key] = {
+            'cachedAt': datetime.now(timezone.utc).isoformat(),
+            'payload': payload,
+        }
+        CACHE_STATS['misses'] += 1
+        CACHE_STATS['writes'] += 1
+    return payload
 
 
 def fetch_open_meteo_current(latitude: float, longitude: float) -> dict[str, Any]:
@@ -94,7 +145,7 @@ def fetch_open_meteo_current(latitude: float, longitude: float) -> dict[str, Any
             'forecast_days': 1,
         }
     )
-    return fetch_json(f'{OPEN_METEO_FORECAST_URL}?{params}')
+    return fetch_json(f'{OPEN_METEO_FORECAST_URL}?{params}', cache_namespace='current', ttl_hours=CACHE_TTL_HOURS['current'])
 
 
 def archive_window() -> tuple[str, str]:
@@ -115,13 +166,17 @@ def fetch_open_meteo_archive(latitude: float, longitude: float) -> dict[str, Any
             'timezone': 'UTC',
         }
     )
-    return fetch_json(f'{OPEN_METEO_ARCHIVE_URL}?{params}')
+    return fetch_json(f'{OPEN_METEO_ARCHIVE_URL}?{params}', cache_namespace='archive', ttl_hours=CACHE_TTL_HOURS['archive'])
 
 
 def fetch_world_bank_indicator(country_codes: list[str], indicator: str) -> list[dict[str, Any]]:
     joined_codes = ';'.join(country_codes)
     params = urlencode({'format': 'json', 'per_page': 200})
-    response = fetch_json(f'{WORLD_BANK_API_URL}/{joined_codes}/indicator/{indicator}?{params}')
+    response = fetch_json(
+        f'{WORLD_BANK_API_URL}/{joined_codes}/indicator/{indicator}?{params}',
+        cache_namespace='world_bank',
+        ttl_hours=CACHE_TTL_HOURS['world_bank'],
+    )
     if not isinstance(response, list) or len(response) < 2 or not isinstance(response[1], list):
         return []
     return response[1]
@@ -524,6 +579,14 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         'durationMs': duration_ms,
         'providers': {
             'detector': {'name': 'backend-ia detector', 'records': provider_counts['detector']},
+            'cache': {
+                'file': str(CACHE_FILE),
+                'ttlHours': CACHE_TTL_HOURS,
+                'hits': CACHE_STATS['hits'],
+                'misses': CACHE_STATS['misses'],
+                'writes': CACHE_STATS['writes'],
+                'entries': len(HTTP_CACHE),
+            },
             'currentClimate': {
                 'name': 'Open-Meteo forecast',
                 'successCount': provider_counts['openMeteoCurrent'],
@@ -604,6 +667,7 @@ def main() -> None:
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_FILE.write_text(json.dumps(curated, indent=2, ensure_ascii=False), encoding='utf-8')
     history = update_history(curated)
+    save_http_cache()
     SOURCE_AUDIT_FILE.write_text(json.dumps(audit, indent=2, ensure_ascii=False), encoding='utf-8')
     print(
         json.dumps(
@@ -614,6 +678,7 @@ def main() -> None:
                 'count': len(curated),
                 'historySeries': len(history),
                 'modelVersion': MODEL_VERSION,
+                'cacheOutput': str(CACHE_FILE),
             },
             indent=2,
         )

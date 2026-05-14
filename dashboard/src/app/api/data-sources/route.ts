@@ -25,6 +25,7 @@ export async function GET() {
         currentClimateProvider: string;
         historicalClimateProvider: string;
         macroeconomicProvider: string;
+        cacheLayer: string;
       };
     }>('/data-sources');
 
@@ -54,10 +55,11 @@ export async function GET() {
       pipeline: {
         auditFile: './data/pipeline-source-audit.json',
         auditAvailable: false,
-        modelVersion: 'pfh-ml-pipeline-v4',
+        modelVersion: 'pfh-ml-pipeline-v5',
         currentClimateProvider: 'open-meteo-forecast',
         historicalClimateProvider: 'open-meteo-archive',
         macroeconomicProvider: 'world-bank-open-data',
+        cacheLayer: 'local-json-http-cache',
       },
     },
     { status: 200 },
