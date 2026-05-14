@@ -168,6 +168,11 @@ class AnalyticsInsightsResponse(BaseModel):
     insights: dict[str, str | int]
 
 
+class PipelineAuditResponse(BaseModel):
+    source: Literal['audit-file', 'unavailable']
+    audit: dict[str, object]
+
+
 class PiAuthVerifyRequest(BaseModel):
     uid: str
     username: str

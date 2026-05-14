@@ -14,6 +14,7 @@ import { PiPaymentsOverviewPanel } from '@/components/pi-app/PiPaymentsOverviewP
 import { ContractEventsPanel } from '@/components/observability/ContractEventsPanel';
 import { ContractSummaryPanel } from '@/components/observability/ContractSummaryPanel';
 import { NetworkOverview } from '@/components/observability/NetworkOverview';
+import { PipelineSourcesPanel } from '@/components/observability/PipelineSourcesPanel';
 import { DetailsPanel } from '@/components/panels/DetailsPanel';
 import { SatelliteSection } from '@/components/panels/SatelliteSection';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -61,6 +62,10 @@ export function OperationsDashboard() {
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <ContractSummaryPanel data={contractSummary} isLoading={isLoadingContractSummary} />
           <ContractEventsPanel data={contractEvents} isLoading={isLoadingContractEvents} />
+        </div>
+
+        <div className="mt-4">
+          <PipelineSourcesPanel />
         </div>
 
         <div className="h-6" />

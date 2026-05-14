@@ -29,6 +29,7 @@ from apps.api.app.models import (
     ProofRecord,
     MoversOverviewResponse,
     PiAuthSessionResponse,
+    PipelineAuditResponse,
     PiAuthVerifyRequest,
     PiPaymentIntent,
     PiPaymentIntentActionResponse,
@@ -300,6 +301,17 @@ def get_data_sources():
             'cacheLayer': 'local-json-http-cache',
         },
     )
+
+
+@app.get('/pipeline-audit', response_model=PipelineAuditResponse)
+def get_pipeline_audit():
+    if settings.pipeline_audit_file.exists():
+        try:
+            audit = json.loads(settings.pipeline_audit_file.read_text(encoding='utf-8'))
+            return PipelineAuditResponse(source='audit-file', audit=audit)
+        except Exception:
+            pass
+    return PipelineAuditResponse(source='unavailable', audit={})
 
 
 @app.get('/public-status', response_model=PublicStatusResponse)
