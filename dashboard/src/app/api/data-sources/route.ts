@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalHotspots, loadLocalPipelineAudit } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -36,13 +37,16 @@ export async function GET() {
     // fallback below
   }
 
+  const localHotspots = await loadLocalHotspots();
+  const localAudit = await loadLocalPipelineAudit();
+
   return NextResponse.json(
     {
       hotspots: {
-        active: 'demo',
+        active: localHotspots.source,
         demoFile: './data/demo-hotspots.json',
         detectorFile: './backend-ia/hotspots_detectados.json',
-        pipelineFile: './data/curated-hotspots.json',
+        pipelineFile: './src/data/curated-hotspots.json',
       },
       events: {
         indexedSnapshotAvailable: false,
@@ -53,9 +57,9 @@ export async function GET() {
         available: false,
       },
       pipeline: {
-        auditFile: './data/pipeline-source-audit.json',
-        auditAvailable: false,
-        modelVersion: 'pfh-ml-pipeline-v5',
+        auditFile: './src/data/pipeline-source-audit.json',
+        auditAvailable: localAudit.source === 'audit-file',
+        modelVersion: String(localAudit.audit.modelVersion ?? 'pfh-ml-pipeline-v5'),
         currentClimateProvider: 'open-meteo-forecast',
         historicalClimateProvider: 'open-meteo-archive',
         macroeconomicProvider: 'world-bank-open-data',

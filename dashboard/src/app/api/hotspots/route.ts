@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { mockCrisisEvents } from '@/lib/mock-data';
+import { loadLocalHotspots } from '@/lib/local-demo';
 import type { CrisisEvent } from '@/types/domain';
 import { fetchExternalApi } from '@/lib/server-api';
 
@@ -17,7 +17,7 @@ export async function GET() {
     // Fallback below.
   }
 
-  return NextResponse.json(mockCrisisEvents, {
+  return NextResponse.json((await loadLocalHotspots()).hotspots, {
     headers: {
       'Cache-Control': 'no-store',
     },

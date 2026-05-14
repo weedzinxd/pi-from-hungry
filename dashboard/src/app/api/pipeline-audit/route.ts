@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { loadLocalPipelineAudit } from '@/lib/local-demo';
 import { fetchExternalApi } from '@/lib/server-api';
 
 export async function GET() {
@@ -22,19 +23,5 @@ export async function GET() {
     // fallback below
   }
 
-  return NextResponse.json(
-    {
-      source: 'unavailable',
-      audit: {
-        modelVersion: 'pfh-ml-pipeline-v5',
-        providers: {
-          currentClimate: { name: 'Open-Meteo forecast' },
-          historicalClimate: { name: 'Open-Meteo archive' },
-          macroeconomics: { name: 'World Bank Open Data' },
-          cache: { name: 'local-json-http-cache' },
-        },
-      },
-    },
-    { status: 200 },
-  );
+  return NextResponse.json(await loadLocalPipelineAudit(), { status: 200 });
 }

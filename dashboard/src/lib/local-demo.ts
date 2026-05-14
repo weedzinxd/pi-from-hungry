@@ -1,5 +1,8 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import curatedHotspots from '@/data/curated-hotspots.json';
+import hotspotHistory from '@/data/hotspot-history.json';
+import pipelineAudit from '@/data/pipeline-source-audit.json';
 import { mockCrisisEvents } from '@/lib/mock-data';
 import type { CrisisEvent } from '@/types/domain';
 import type { PiPaymentIntent } from '@/hooks/usePiPaymentIntents';
@@ -18,15 +21,14 @@ async function readJsonFile<T>(filePath: string, fallback: T): Promise<T> {
 }
 
 export async function loadLocalHotspots(): Promise<{ hotspots: CrisisEvent[]; source: 'pipeline' | 'demo' }> {
-  const curated = await readJsonFile<CrisisEvent[]>(repoPath('data', 'curated-hotspots.json'), []);
-  if (curated.length) {
-    return { hotspots: curated, source: 'pipeline' };
+  if (Array.isArray(curatedHotspots) && curatedHotspots.length) {
+    return { hotspots: curatedHotspots as CrisisEvent[], source: 'pipeline' };
   }
   return { hotspots: mockCrisisEvents, source: 'demo' };
 }
 
 export async function loadLocalHistory(): Promise<Record<string, Array<Record<string, number | string>>>> {
-  return readJsonFile<Record<string, Array<Record<string, number | string>>>>(repoPath('data', 'hotspot-history.json'), {});
+  return hotspotHistory as Record<string, Array<Record<string, number | string>>>;
 }
 
 export async function loadLocalProofs() {
@@ -221,6 +223,20 @@ export async function loadLocalPiUserImpact(username: string) {
     },
     badges,
     latestIntents: filtered.slice(0, 5),
+  };
+}
+
+export async function loadLocalPipelineAudit() {
+  return {
+    source: 'audit-file' as const,
+    audit: pipelineAudit as {
+      generatedAt?: string;
+      modelVersion?: string;
+      hotspotsCount?: number;
+      durationMs?: number;
+      providers?: Record<string, unknown>;
+      metrics?: Record<string, unknown>;
+    },
   };
 }
 
