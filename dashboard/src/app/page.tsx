@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Globe2, ShieldCheck, Satellite, Sparkles, Wallet } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { DataQualityShowcase } from '@/components/public/DataQualityShowcase';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
 import { Panel, PanelBody, PanelHeader } from '@/components/ui/Panel';
 import { StatusPill } from '@/components/ui/StatusPill';
@@ -119,7 +120,10 @@ export default function HomePage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-8">
-          <PublicStatusStrip />
+          <div className="space-y-4">
+            <PublicStatusStrip />
+            <DataQualityShowcase />
+          </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14">

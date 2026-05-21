@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { PipelineFreshnessStrip } from '@/components/observability/PipelineFreshnessStrip';
+import { HotspotsExecutiveStrip } from '@/components/public/HotspotsExecutiveStrip';
 import { Panel, PanelBody, PanelHeader } from '@/components/ui/Panel';
 import { StatusPill } from '@/components/ui/StatusPill';
 import { useHotspots } from '@/hooks/useHotspots';
@@ -27,6 +29,11 @@ export default function HotspotsPage() {
           <p className="mt-4 text-zinc-400">
             Lista pública dos focos carregados na demo atual, com contexto operacional resumido e navegação para detalhes.
           </p>
+        </div>
+
+        <div className="mb-8 space-y-4">
+          <PipelineFreshnessStrip />
+          <HotspotsExecutiveStrip />
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
