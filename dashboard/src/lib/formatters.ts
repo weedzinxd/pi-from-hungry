@@ -13,3 +13,20 @@ export function formatPercent(value: number): string {
 export function formatInteger(num: number): string {
   return new Intl.NumberFormat('pt-BR').format(Math.round(num));
 }
+
+export function formatDateTime(value?: string): string {
+  if (!value) return 'n/a';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'n/a';
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+    timeZone: 'UTC',
+  }).format(date).replace(',', ' •');
+}
+
+export function formatDurationMs(value?: number): string {
+  if (!value || value <= 0) return 'n/a';
+  if (value >= 1000) return `${(value / 1000).toFixed(1)}s`;
+  return `${Math.round(value)}ms`;
+}

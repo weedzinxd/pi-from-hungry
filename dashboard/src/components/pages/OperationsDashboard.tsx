@@ -15,6 +15,7 @@ import { ContractEventsPanel } from '@/components/observability/ContractEventsPa
 import { ContractSummaryPanel } from '@/components/observability/ContractSummaryPanel';
 import { NetworkOverview } from '@/components/observability/NetworkOverview';
 import { PipelineSourcesPanel } from '@/components/observability/PipelineSourcesPanel';
+import { PipelineFreshnessStrip } from '@/components/observability/PipelineFreshnessStrip';
 import { DetailsPanel } from '@/components/panels/DetailsPanel';
 import { SatelliteSection } from '@/components/panels/SatelliteSection';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -58,6 +59,10 @@ export function OperationsDashboard() {
           contractEvents={contractEvents}
           contractSummary={contractSummary}
         />
+
+        <div className="mt-4">
+          <PipelineFreshnessStrip />
+        </div>
 
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <ContractSummaryPanel data={contractSummary} isLoading={isLoadingContractSummary} />

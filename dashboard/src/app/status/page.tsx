@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Gauge, Workflow } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { PipelineFreshnessStrip } from '@/components/observability/PipelineFreshnessStrip';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
 import { InfoListPanel } from '@/components/public/InfoListPanel';
 import { PageHero } from '@/components/public/PageHero';
@@ -36,8 +37,9 @@ export default function StatusPage() {
           />
         </div>
 
-        <div className="mb-8">
+        <div className="mb-8 space-y-4">
           <PublicStatusStrip />
+          <PipelineFreshnessStrip />
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
