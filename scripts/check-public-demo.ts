@@ -33,7 +33,7 @@ async function runCheck(name: string, url: string, matcher?: string): Promise<Ch
 
 async function main() {
   const dashboardBase = (process.env.DASHBOARD_URL ?? process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '');
-  const apiBase = (process.env.API_URL ?? process.argv[3] ?? 'http://localhost:8080').replace(/\/$/, '');
+  const apiBase = (process.env.API_URL ?? process.argv[3] ?? (dashboardBase.includes('vercel.app') ? `${dashboardBase}/api` : 'http://localhost:8080')).replace(/\/$/, '');
 
   const checks = await Promise.all([
     runCheck('dashboard:home', `${dashboardBase}/`, 'Tecnologia humanitária'),
