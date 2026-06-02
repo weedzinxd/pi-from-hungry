@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-02T10:36:33.508192+00:00",
+  "generatedAt": "2026-06-02T10:49:29.814029+00:00",
   "modelVersion": "pfh-ml-pipeline-v6",
   "hotspotsCount": 5,
-  "durationMs": 18.11,
+  "durationMs": 10.66,
   "providers": {
     "detector": {
       "name": "backend-ia detector",

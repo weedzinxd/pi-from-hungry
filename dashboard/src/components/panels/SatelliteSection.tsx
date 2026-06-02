@@ -11,20 +11,31 @@ export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
     );
   }
 
+  const primarySatelliteUrl = event.noaaSatelliteUrl || event.satelliteUrl;
+  const primarySatelliteLabel = event.noaaSatelliteUrl ? 'SATELLITE LIVE - NOAA STAR' : 'SATELLITE LIVE - NASA FIRMS';
+  const primarySatelliteTitle = event.noaaSatelliteUrl ? 'NOAA Vegetation View' : 'NASA Fire Map';
+
   return (
     <div className="space-y-4">
       <div className="bg-zinc-900 rounded-xl border border-cyan-500/30 overflow-hidden">
         <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 px-4 py-2 border-b border-zinc-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Satellite className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span className="text-cyan-400 font-bold text-sm">SATELLITE LIVE - NASA FIRMS</span>
+            <span className="text-cyan-400 font-bold text-sm">{primarySatelliteLabel}</span>
           </div>
-          <a href={event.satelliteUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-white flex items-center gap-1">
-            <ExternalLink className="w-3 h-3" /> Full Screen
-          </a>
+          <div className="flex items-center gap-3">
+            {event.noaaSatelliteUrl ? (
+              <a href={event.satelliteUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-400 hover:text-white flex items-center gap-1">
+                <ExternalLink className="w-3 h-3" /> NASA ref
+              </a>
+            ) : null}
+            <a href={primarySatelliteUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-white flex items-center gap-1">
+              <ExternalLink className="w-3 h-3" /> Full Screen
+            </a>
+          </div>
         </div>
-        <div className="relative h-[250px] bg-zinc-950">
-          <iframe src={event.satelliteUrl} className="w-full h-full border-0" title="NASA Fire Map" sandbox="allow-scripts allow-same-origin" />
+        <div className="relative h-[320px] bg-zinc-950">
+          <iframe src={primarySatelliteUrl} className="w-full h-full border-0" title={primarySatelliteTitle} sandbox="allow-scripts allow-same-origin" />
         </div>
       </div>
 

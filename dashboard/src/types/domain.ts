@@ -14,6 +14,7 @@ export interface CrisisEvent {
   gvcActive: boolean;
   coordinates: [number, number];
   satelliteUrl: string;
+  noaaSatelliteUrl?: string | null;
   webcamUrl?: string;
   liveData: {
     temperature: number;

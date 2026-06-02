@@ -40,30 +40,35 @@ REGION_METADATA: dict[str, dict[str, Any]] = {
         'countryCodes': ['MLI', 'NER', 'BFA'],
         'region': 'Africa',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
+        'noaaRegionParam': '92,MLI',
     },
     'Iêmen': {
         'country': 'Yemen',
         'countryCodes': ['YEM'],
         'region': 'Middle East',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
+        'noaaRegionParam': '159,YEM',
     },
     'Sudão do Sul': {
         'country': 'South Sudan',
         'countryCodes': ['SSD'],
         'region': 'Africa',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
+        'noaaRegionParam': '134,SDN',
     },
     'Afeganistão': {
         'country': 'Afghanistan',
         'countryCodes': ['AFG'],
         'region': 'Asia',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
+        'noaaRegionParam': '1,AFG',
     },
     'Haiti': {
         'country': 'Haiti',
         'countryCodes': ['HTI'],
         'region': 'Caribbean',
         'satelliteUrl': 'https://firms.modaps.eosdis.nasa.gov/',
+        'noaaRegionParam': '63,HTI',
     },
 }
 
@@ -628,6 +633,11 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                 'gvcActive': True,
                 'coordinates': [latitude, longitude],
                 'satelliteUrl': metadata.get('satelliteUrl', 'https://firms.modaps.eosdis.nasa.gov/'),
+                'noaaSatelliteUrl': (
+                    f"https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_browseByCountry_Images.php?region={metadata.get('noaaRegionParam', '')}"
+                    if metadata.get('noaaRegionParam')
+                    else None
+                ),
                 'liveData': {
                     'temperature': int(round(float(weather['temperature']))),
                     'humidity': int(round(float(weather['humidity']))),
