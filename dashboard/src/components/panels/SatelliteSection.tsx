@@ -1,4 +1,5 @@
-import { Droplets, ExternalLink, Satellite, Thermometer, TreePine, Wind } from 'lucide-react';
+import { Droplets, ExternalLink, Satellite, Thermometer, TreePine, Waves, Wind } from 'lucide-react';
+import { formatPercent } from '@/lib/formatters';
 import type { CrisisEvent } from '@/types/domain';
 
 export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
@@ -12,9 +13,8 @@ export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
   }
 
   const primarySatelliteUrl = event.noaaSatelliteUrl || event.satelliteUrl;
-  const primarySatelliteLabel = event.noaaImageUrl ? 'SATELLITE LIVE - NOAA STAR' : 'SATELLITE LIVE - NASA FIRMS';
-  const primarySatelliteTitle = event.noaaImageUrl ? 'NOAA Vegetation View' : 'NASA Fire Map';
-  const proxiedNoaaImageUrl = event.noaaImageUrl ? `/api/noaa-image?url=${encodeURIComponent(event.noaaImageUrl)}` : null;
+  const primarySatelliteLabel = event.noaaSatelliteUrl ? 'SATELLITE LIVE - NOAA STAR' : 'SATELLITE LIVE - NASA FIRMS';
+  const primarySatelliteTitle = event.noaaSatelliteUrl ? 'NOAA Vegetation View' : 'NASA Fire Map';
 
   return (
     <div className="space-y-4">
@@ -35,11 +35,44 @@ export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
             </a>
           </div>
         </div>
-        <div className="relative flex h-[320px] items-center justify-center bg-zinc-950">
-          {proxiedNoaaImageUrl ? (
-            <img src={proxiedNoaaImageUrl} alt={primarySatelliteTitle} className="h-full w-full object-contain" />
+        <div className="relative bg-zinc-950 p-5">
+          {event.noaaSatelliteUrl ? (
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4 text-sm text-zinc-300">
+                <p className="font-semibold text-white">Camada NOAA ativa</p>
+                <p className="mt-2 leading-6 text-zinc-400">
+                  Este hotspot agora usa NOAA STAR Vegetation Health Products como camada satelital principal.
+                  A visualização NOAA abre em nova aba e os índices live já estão incorporados ao score abaixo.
+                </p>
+              </div>
+              <div className="grid gap-3 md:grid-cols-4">
+                <div className="rounded-xl border border-zinc-800 bg-black/30 p-4 text-center">
+                  <Satellite className="mx-auto mb-2 h-5 w-5 text-cyan-400" />
+                  <p className="text-xs text-zinc-500">NOAA VHI</p>
+                  <p className="mt-1 text-xl font-bold text-white">{Number(event.analytics?.noaaVhi ?? 0).toFixed(2)}</p>
+                </div>
+                <div className="rounded-xl border border-zinc-800 bg-black/30 p-4 text-center">
+                  <TreePine className="mx-auto mb-2 h-5 w-5 text-emerald-400" />
+                  <p className="text-xs text-zinc-500">NOAA VCI</p>
+                  <p className="mt-1 text-xl font-bold text-white">{Number(event.analytics?.noaaVci ?? 0).toFixed(2)}</p>
+                </div>
+                <div className="rounded-xl border border-zinc-800 bg-black/30 p-4 text-center">
+                  <Thermometer className="mx-auto mb-2 h-5 w-5 text-orange-400" />
+                  <p className="text-xs text-zinc-500">NOAA TCI</p>
+                  <p className="mt-1 text-xl font-bold text-white">{Number(event.analytics?.noaaTci ?? 0).toFixed(2)}</p>
+                </div>
+                <div className="rounded-xl border border-zinc-800 bg-black/30 p-4 text-center">
+                  <Waves className="mx-auto mb-2 h-5 w-5 text-sky-400" />
+                  <p className="text-xs text-zinc-500">Stress NOAA</p>
+                  <p className="mt-1 text-xl font-bold text-white">{formatPercent(event.analytics?.noaaVegetationStressScore ?? 0)}</p>
+                </div>
+              </div>
+              <div className="rounded-xl border border-zinc-800 bg-black/30 p-4 text-xs text-zinc-400">
+                Semana NOAA: <span className="font-semibold text-white">{event.analytics?.noaaReferenceWeek ?? 'n/a'}/{event.analytics?.noaaReferenceYear ?? 'n/a'}</span>
+              </div>
+            </div>
           ) : (
-            <iframe src={primarySatelliteUrl} className="w-full h-full border-0" title={primarySatelliteTitle} sandbox="allow-scripts allow-same-origin" />
+            <iframe src={primarySatelliteUrl} className="h-[320px] w-full border-0" title={primarySatelliteTitle} sandbox="allow-scripts allow-same-origin" />
           )}
         </div>
       </div>
