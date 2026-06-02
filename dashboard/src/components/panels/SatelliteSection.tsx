@@ -12,8 +12,9 @@ export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
   }
 
   const primarySatelliteUrl = event.noaaSatelliteUrl || event.satelliteUrl;
-  const primarySatelliteLabel = event.noaaSatelliteUrl ? 'SATELLITE LIVE - NOAA STAR' : 'SATELLITE LIVE - NASA FIRMS';
-  const primarySatelliteTitle = event.noaaSatelliteUrl ? 'NOAA Vegetation View' : 'NASA Fire Map';
+  const primarySatelliteLabel = event.noaaImageUrl ? 'SATELLITE LIVE - NOAA STAR' : 'SATELLITE LIVE - NASA FIRMS';
+  const primarySatelliteTitle = event.noaaImageUrl ? 'NOAA Vegetation View' : 'NASA Fire Map';
+  const proxiedNoaaImageUrl = event.noaaImageUrl ? `/api/noaa-image?url=${encodeURIComponent(event.noaaImageUrl)}` : null;
 
   return (
     <div className="space-y-4">
@@ -34,8 +35,12 @@ export function SatelliteSection({ event }: { event: CrisisEvent | null }) {
             </a>
           </div>
         </div>
-        <div className="relative h-[320px] bg-zinc-950">
-          <iframe src={primarySatelliteUrl} className="w-full h-full border-0" title={primarySatelliteTitle} sandbox="allow-scripts allow-same-origin" />
+        <div className="relative flex h-[320px] items-center justify-center bg-zinc-950">
+          {proxiedNoaaImageUrl ? (
+            <img src={proxiedNoaaImageUrl} alt={primarySatelliteTitle} className="h-full w-full object-contain" />
+          ) : (
+            <iframe src={primarySatelliteUrl} className="w-full h-full border-0" title={primarySatelliteTitle} sandbox="allow-scripts allow-same-origin" />
+          )}
         </div>
       </div>
 

@@ -638,6 +638,14 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     if metadata.get('noaaRegionParam')
                     else None
                 ),
+                'noaaImageUrl': (
+                    'https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/image_country_G04L01.php'
+                    f"?country={metadata.get('noaaRegionParam', '')}&source=Blended&type=VHI"
+                    f"&week={noaa_vhp['reference_year']},{noaa_vhp['reference_week']}"
+                    '&mask=-9999&title=NOAA+VHI&showGrid=1&showBoundary=1&zoom=-1'
+                    if metadata.get('noaaRegionParam') and noaa_vhp.get('reference_year') and noaa_vhp.get('reference_week')
+                    else None
+                ),
                 'liveData': {
                     'temperature': int(round(float(weather['temperature']))),
                     'humidity': int(round(float(weather['humidity']))),

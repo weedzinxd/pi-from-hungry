@@ -1,13 +1,6 @@
 {
   "pipeline-001": [
     {
-      "timestamp": "2026-05-02T03:41:32.263681+00:00",
-      "foodRiskScore": 0.761,
-      "operationalPriorityScore": 0.693,
-      "confidenceScore": 0.93,
-      "climateStressScore": 0.548
-    },
-    {
       "timestamp": "2026-05-02T11:39:30.445402+00:00",
       "foodRiskScore": 0.869,
       "operationalPriorityScore": 0.824,
@@ -83,16 +76,16 @@
       "operationalPriorityScore": 0.613,
       "confidenceScore": 0.98,
       "climateStressScore": 0.563
+    },
+    {
+      "timestamp": "2026-06-02T12:13:40.832888+00:00",
+      "foodRiskScore": 0.668,
+      "operationalPriorityScore": 0.613,
+      "confidenceScore": 0.98,
+      "climateStressScore": 0.563
     }
   ],
   "pipeline-002": [
-    {
-      "timestamp": "2026-05-02T03:41:33.198525+00:00",
-      "foodRiskScore": 0.728,
-      "operationalPriorityScore": 0.659,
-      "confidenceScore": 0.93,
-      "climateStressScore": 0.463
-    },
     {
       "timestamp": "2026-05-02T11:39:31.563026+00:00",
       "foodRiskScore": 0.815,
@@ -169,16 +162,16 @@
       "operationalPriorityScore": 0.844,
       "confidenceScore": 0.98,
       "climateStressScore": 0.845
+    },
+    {
+      "timestamp": "2026-06-02T12:13:40.834779+00:00",
+      "foodRiskScore": 0.842,
+      "operationalPriorityScore": 0.844,
+      "confidenceScore": 0.98,
+      "climateStressScore": 0.845
     }
   ],
   "pipeline-003": [
-    {
-      "timestamp": "2026-05-02T03:41:34.135305+00:00",
-      "foodRiskScore": 0.707,
-      "operationalPriorityScore": 0.676,
-      "confidenceScore": 0.93,
-      "climateStressScore": 0.401
-    },
     {
       "timestamp": "2026-05-02T11:39:32.694928+00:00",
       "foodRiskScore": 0.815,
@@ -255,16 +248,16 @@
       "operationalPriorityScore": 0.583,
       "confidenceScore": 0.98,
       "climateStressScore": 0.46
+    },
+    {
+      "timestamp": "2026-06-02T12:13:40.836105+00:00",
+      "foodRiskScore": 0.647,
+      "operationalPriorityScore": 0.583,
+      "confidenceScore": 0.98,
+      "climateStressScore": 0.46
     }
   ],
   "pipeline-004": [
-    {
-      "timestamp": "2026-05-02T03:41:35.051410+00:00",
-      "foodRiskScore": 0.616,
-      "operationalPriorityScore": 0.601,
-      "confidenceScore": 0.93,
-      "climateStressScore": 0.441
-    },
     {
       "timestamp": "2026-05-02T11:39:33.821406+00:00",
       "foodRiskScore": 0.664,
@@ -341,16 +334,16 @@
       "operationalPriorityScore": 0.721,
       "confidenceScore": 0.98,
       "climateStressScore": 0.674
+    },
+    {
+      "timestamp": "2026-06-02T12:13:40.837435+00:00",
+      "foodRiskScore": 0.703,
+      "operationalPriorityScore": 0.721,
+      "confidenceScore": 0.98,
+      "climateStressScore": 0.674
     }
   ],
   "pipeline-005": [
-    {
-      "timestamp": "2026-05-02T03:41:35.988017+00:00",
-      "foodRiskScore": 0.61,
-      "operationalPriorityScore": 0.565,
-      "confidenceScore": 0.93,
-      "climateStressScore": 0.352
-    },
     {
       "timestamp": "2026-05-02T11:39:34.945811+00:00",
       "foodRiskScore": 0.595,
@@ -423,6 +416,13 @@
     },
     {
       "timestamp": "2026-06-02T10:49:29.824632+00:00",
+      "foodRiskScore": 0.513,
+      "operationalPriorityScore": 0.456,
+      "confidenceScore": 0.98,
+      "climateStressScore": 0.229
+    },
+    {
+      "timestamp": "2026-06-02T12:13:40.838812+00:00",
       "foodRiskScore": 0.513,
       "operationalPriorityScore": 0.456,
       "confidenceScore": 0.98,

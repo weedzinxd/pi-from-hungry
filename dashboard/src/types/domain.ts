@@ -15,6 +15,7 @@ export interface CrisisEvent {
   coordinates: [number, number];
   satelliteUrl: string;
   noaaSatelliteUrl?: string | null;
+  noaaImageUrl?: string | null;
   webcamUrl?: string;
   liveData: {
     temperature: number;
