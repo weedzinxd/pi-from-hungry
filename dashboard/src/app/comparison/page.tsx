@@ -6,6 +6,8 @@ import { AnalyticsSummaryStrip } from '@/components/analytics/AnalyticsSummarySt
 import { MoversPanel } from '@/components/analytics/MoversPanel';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { PipelineFreshnessStrip } from '@/components/observability/PipelineFreshnessStrip';
+import { ComparisonExecutiveStrip } from '@/components/public/ComparisonExecutiveStrip';
 import { PublicStatusStrip } from '@/components/public/PublicStatusStrip';
 import { Panel, PanelBody, PanelHeader } from '@/components/ui/Panel';
 import { StatusPill } from '@/components/ui/StatusPill';
@@ -29,8 +31,10 @@ export default function ComparisonPage() {
           </p>
         </div>
 
-        <div className="mb-8">
+        <div className="mb-8 space-y-4">
           <PublicStatusStrip />
+          <PipelineFreshnessStrip />
+          <ComparisonExecutiveStrip />
         </div>
 
         <AnalyticsSummaryStrip />

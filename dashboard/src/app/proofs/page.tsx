@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { CheckCircle2, ExternalLink, FileBadge2 } from 'lucide-react';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { PipelineFreshnessStrip } from '@/components/observability/PipelineFreshnessStrip';
+import { ProofsSummaryStrip } from '@/components/public/ProofsSummaryStrip';
 import { Panel, PanelBody, PanelHeader } from '@/components/ui/Panel';
 import { StatusPill } from '@/components/ui/StatusPill';
 import { useDeploymentStatus } from '@/hooks/useDeploymentStatus';
@@ -35,6 +37,11 @@ export default function ProofsPage() {
           </div>
         </div>
 
+        <div className="mb-8 space-y-4">
+          <ProofsSummaryStrip />
+          <PipelineFreshnessStrip />
+        </div>
+
         <div className="grid gap-4 lg:grid-cols-3">
           <Panel className="lg:col-span-2">
             <PanelHeader title="Registros públicos" subtitle="Tx hashes de exemplo e regiões associadas" />
@@ -52,9 +59,9 @@ export default function ProofsPage() {
                         <StatusPill label={proof.status} tone="success" />
                       </div>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-zinc-400">
-                      <span>Network: {proof.network}</span>
-                      <span>Recorded at: {proof.recordedAt}</span>
+                    <div className="mt-3 grid gap-3 text-xs text-zinc-400 md:grid-cols-2">
+                      <div className="rounded-xl border border-zinc-800 bg-black/30 p-3">Network: <span className="font-semibold text-white">{proof.network}</span></div>
+                      <div className="rounded-xl border border-zinc-800 bg-black/30 p-3">Recorded at: <span className="font-semibold text-white">{proof.recordedAt}</span></div>
                     </div>
                   </div>
                 ))
