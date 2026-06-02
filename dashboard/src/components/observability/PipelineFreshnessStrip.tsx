@@ -27,7 +27,7 @@ export function PipelineFreshnessStrip() {
     {
       icon: Layers3,
       label: 'Model version',
-      value: data?.audit.modelVersion ?? 'pfh-ml-pipeline-v5',
+      value: data?.audit.modelVersion ?? 'pfh-ml-pipeline-v6',
     },
   ];
 

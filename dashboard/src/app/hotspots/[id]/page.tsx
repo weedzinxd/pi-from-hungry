@@ -105,6 +105,10 @@ export default function HotspotDetailsPage() {
                           <p className="font-bold text-lime-400">{formatPercent(hotspot.analytics.ndviProxy ?? 0)}</p>
                         </div>
                         <div>
+                          <p className="text-zinc-500">NOAA vegetation stress</p>
+                          <p className="font-bold text-sky-400">{formatPercent(hotspot.analytics.noaaVegetationStressScore ?? 0)}</p>
+                        </div>
+                        <div>
                           <p className="text-zinc-500">Dry days ratio</p>
                           <p className="font-bold text-cyan-400">{formatPercent(hotspot.analytics.dryDaysRatio ?? 0)}</p>
                         </div>
@@ -113,6 +117,12 @@ export default function HotspotDetailsPage() {
                         <p>PIB per capita: <span className="font-semibold text-white">${formatNumber(hotspot.analytics.gdpPerCapitaUsd ?? 0)}</span></p>
                         <p className="mt-1">Inflação: <span className="font-semibold text-white">{Number(hotspot.analytics.inflationConsumerPricesPct ?? 0).toFixed(2)}%</span></p>
                         <p className="mt-1">Ano macro: <span className="font-semibold text-white">{hotspot.analytics.macroReferenceYear ?? 'n/a'}</span></p>
+                      </div>
+                      <div className="mt-3 rounded-xl border border-zinc-800 bg-black/30 p-3 text-xs text-zinc-300">
+                        <p>NOAA VHI: <span className="font-semibold text-white">{Number(hotspot.analytics.noaaVhi ?? 0).toFixed(2)}</span></p>
+                        <p className="mt-1">NOAA VCI: <span className="font-semibold text-white">{Number(hotspot.analytics.noaaVci ?? 0).toFixed(2)}</span></p>
+                        <p className="mt-1">NOAA TCI: <span className="font-semibold text-white">{Number(hotspot.analytics.noaaTci ?? 0).toFixed(2)}</span></p>
+                        <p className="mt-1">Semana NOAA: <span className="font-semibold text-white">{hotspot.analytics.noaaReferenceWeek ?? 'n/a'}/{hotspot.analytics.noaaReferenceYear ?? 'n/a'}</span></p>
                       </div>
                       <p className="mt-3 text-xs text-zinc-500">{hotspot.analytics.sourceModelVersion} • {hotspot.analytics.computedAt}</p>
                     </div>

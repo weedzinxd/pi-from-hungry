@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-05-14T12:10:50.657415+00:00",
-  "modelVersion": "pfh-ml-pipeline-v5",
+  "generatedAt": "2026-06-02T10:36:33.508192+00:00",
+  "modelVersion": "pfh-ml-pipeline-v6",
   "hotspotsCount": 5,
-  "durationMs": 6529.05,
+  "durationMs": 18.11,
   "providers": {
     "detector": {
       "name": "backend-ia detector",
@@ -13,12 +13,13 @@
       "ttlHours": {
         "current": 6,
         "archive": 72,
-        "world_bank": 336
+        "world_bank": 336,
+        "noaa_vhp": 72
       },
-      "hits": 0,
-      "misses": 20,
-      "writes": 20,
-      "entries": 20
+      "hits": 27,
+      "misses": 0,
+      "writes": 0,
+      "entries": 32
     },
     "currentClimate": {
       "name": "Open-Meteo forecast",
@@ -28,6 +29,11 @@
     "historicalClimate": {
       "name": "Open-Meteo archive",
       "window": "30d recent vs 90d baseline",
+      "successCount": 5,
+      "fallbackCount": 0
+    },
+    "noaaVegetation": {
+      "name": "NOAA STAR Vegetation Health Product",
       "successCount": 5,
       "fallbackCount": 0
     },
@@ -43,8 +49,9 @@
   },
   "metrics": {
     "avgConfidenceScore": 0.98,
-    "avgPrecipitationAnomalyScore": 0.344,
-    "avgThermalAnomalyScore": 0.513,
-    "avgEconomicStressScore": 0.783
+    "avgPrecipitationAnomalyScore": 0.367,
+    "avgThermalAnomalyScore": 0.482,
+    "avgEconomicStressScore": 0.783,
+    "avgNoaaVegetationStressScore": 0.559
   }
 }

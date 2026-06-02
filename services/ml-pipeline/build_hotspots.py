@@ -23,13 +23,15 @@ OPEN_METEO_ARCHIVE_URL = 'https://archive-api.open-meteo.com/v1/archive'
 WORLD_BANK_API_URL = 'https://api.worldbank.org/v2/country'
 WORLD_BANK_GDP_PER_CAPITA = 'NY.GDP.PCAP.CD'
 WORLD_BANK_INFLATION = 'FP.CPI.TOTL.ZG'
-MODEL_VERSION = 'pfh-ml-pipeline-v5'
+NOAA_VHP_URL = 'https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/get_TS_admin.php'
+MODEL_VERSION = 'pfh-ml-pipeline-v6'
 ARCHIVE_RECENT_DAYS = 30
 ARCHIVE_BASELINE_DAYS = 90
 CACHE_TTL_HOURS = {
     'current': 6,
     'archive': 72,
     'world_bank': 24 * 14,
+    'noaa_vhp': 24 * 3,
 }
 
 REGION_METADATA: dict[str, dict[str, Any]] = {
@@ -122,7 +124,11 @@ def fetch_json(url: str, cache_namespace: str | None = None, ttl_hours: int | No
                 pass
 
     with urlopen(url, timeout=25) as response:
-        payload = json.loads(response.read().decode('utf-8'))
+        raw_text = response.read().decode('utf-8', errors='ignore')
+        try:
+            payload = json.loads(raw_text)
+        except Exception:
+            payload = raw_text
 
     if cache_namespace and ttl_hours is not None:
         HTTP_CACHE[cache_key] = {
@@ -180,6 +186,26 @@ def fetch_world_bank_indicator(country_codes: list[str], indicator: str) -> list
     if not isinstance(response, list) or len(response) < 2 or not isinstance(response[1], list):
         return []
     return response[1]
+
+
+def fetch_noaa_vhp_country(country_code: str) -> str:
+    params = urlencode(
+        {
+            'TagCropland': 'land',
+            'country': country_code,
+            'provinceID': 0,
+            'type': 'Mean',
+            'year1': max(date.today().year - 2, 2024),
+            'year2': date.today().year,
+            'yearlyTag': 'Weekly',
+        }
+    )
+    response = fetch_json(
+        f'{NOAA_VHP_URL}?{params}',
+        cache_namespace='noaa_vhp',
+        ttl_hours=CACHE_TTL_HOURS['noaa_vhp'],
+    )
+    return response if isinstance(response, str) else json.dumps(response)
 
 
 def latest_indicator_average(entries: list[dict[str, Any]]) -> tuple[float | None, str | None, int]:
@@ -250,6 +276,21 @@ def fallback_socioeconomics(detector_score: float, country_codes: list[str]) -> 
     }
 
 
+def fallback_noaa_vhp(detector_score: float) -> dict[str, Any]:
+    vhi = round(max(12.0, 62.0 - (detector_score * 28.0)), 2)
+    vci = round(max(10.0, vhi - 5.0), 2)
+    tci = round(max(10.0, min(100.0, vhi + 4.0)), 2)
+    return {
+        'vhi': vhi,
+        'vci': vci,
+        'tci': tci,
+        'reference_week': None,
+        'reference_year': None,
+        'records': 0,
+        'source': 'fallback-noaa-vhp',
+    }
+
+
 def normalize_weather_payload(raw: dict[str, Any], fallback: dict[str, Any]) -> dict[str, Any]:
     current = raw.get('current') or {}
     daily = raw.get('daily') or {}
@@ -309,7 +350,45 @@ def normalize_socioeconomics_payload(gdp_entries: list[dict[str, Any]], inflatio
     }
 
 
-def derive_climate_signals(weather: dict[str, Any], archive: dict[str, Any]) -> dict[str, float]:
+def normalize_noaa_vhp_payload(raw_texts: list[str], fallback: dict[str, Any]) -> dict[str, Any]:
+    records: list[tuple[int, int, float, float, float]] = []
+    for raw_text in raw_texts:
+        for line in raw_text.replace('<br>', '\n').replace('</pre>', '\n').splitlines():
+            cleaned = line.strip().replace('<tt><pre>', '')
+            if not cleaned or not cleaned[:4].isdigit():
+                continue
+            parts = [part.strip() for part in cleaned.split(',') if part.strip()]
+            if len(parts) < 7:
+                continue
+            try:
+                year = int(parts[0])
+                week = int(parts[1])
+                vci = float(parts[4])
+                tci = float(parts[5])
+                vhi = float(parts[6])
+            except (TypeError, ValueError):
+                continue
+            if min(vci, tci, vhi) < 0:
+                continue
+            records.append((year, week, vci, tci, vhi))
+
+    if not records:
+        return fallback
+
+    latest_year, latest_week = max((item[0], item[1]) for item in records)
+    latest_records = [item for item in records if item[0] == latest_year and item[1] == latest_week]
+    return {
+        'vhi': round(mean(item[4] for item in latest_records), 2),
+        'vci': round(mean(item[2] for item in latest_records), 2),
+        'tci': round(mean(item[3] for item in latest_records), 2),
+        'reference_week': int(latest_week),
+        'reference_year': int(latest_year),
+        'records': len(records),
+        'source': 'noaa-star-vhp',
+    }
+
+
+def derive_climate_signals(weather: dict[str, Any], archive: dict[str, Any], noaa_vhp: dict[str, Any]) -> dict[str, float]:
     temp_score = scale(float(weather['temperature']), 26, 46)
     humidity_inverse = 1 - scale(float(weather['humidity']), 20, 90)
     wind_score = scale(float(weather['wind_speed']), 5, 35)
@@ -324,20 +403,27 @@ def derive_climate_signals(weather: dict[str, Any], archive: dict[str, Any]) -> 
     thermal_anomaly = scale(thermal_delta, 0, 8)
     dry_days_ratio = clamp(float(archive['dry_days_ratio']))
 
+    noaa_vhi_stress = 1 - scale(float(noaa_vhp['vhi']), 20, 80)
+    noaa_vci_stress = 1 - scale(float(noaa_vhp['vci']), 20, 80)
+    noaa_tci_stress = 1 - scale(float(noaa_vhp['tci']), 20, 80)
+
     ndvi_proxy = round(
-        clamp(1 - ((precipitation_anomaly * 0.4) + (thermal_anomaly * 0.2) + (instantaneous_dry_score * 0.2) + (humidity_inverse * 0.1) + (temp_score * 0.1))),
+        clamp(1 - ((precipitation_anomaly * 0.3) + (thermal_anomaly * 0.15) + (instantaneous_dry_score * 0.15) + (humidity_inverse * 0.1) + (temp_score * 0.1) + (noaa_vhi_stress * 0.2))),
         3,
     )
 
     climate_stress = clamp(
-        (temp_score * 0.22)
-        + (humidity_inverse * 0.12)
-        + (wind_score * 0.08)
-        + (instantaneous_dry_score * 0.14)
-        + (precipitation_anomaly * 0.22)
-        + (thermal_anomaly * 0.1)
-        + (dry_days_ratio * 0.06)
-        + ((1 - ndvi_proxy) * 0.06)
+        (temp_score * 0.18)
+        + (humidity_inverse * 0.1)
+        + (wind_score * 0.06)
+        + (instantaneous_dry_score * 0.12)
+        + (precipitation_anomaly * 0.18)
+        + (thermal_anomaly * 0.08)
+        + (dry_days_ratio * 0.05)
+        + ((1 - ndvi_proxy) * 0.05)
+        + (noaa_vhi_stress * 0.1)
+        + (noaa_vci_stress * 0.04)
+        + (noaa_tci_stress * 0.04)
     )
 
     return {
@@ -350,6 +436,7 @@ def derive_climate_signals(weather: dict[str, Any], archive: dict[str, Any]) -> 
         'dryDaysRatio': round(dry_days_ratio, 3),
         'ndviProxy': ndvi_proxy,
         'climateStressScore': round(climate_stress, 3),
+        'noaaVegetationStressScore': round(clamp((noaa_vhi_stress * 0.6) + (noaa_vci_stress * 0.2) + (noaa_tci_stress * 0.2)), 3),
     }
 
 
@@ -384,8 +471,8 @@ def severity_from_priority(priority: float) -> str:
     return 'MODERATE'
 
 
-def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict[str, Any], socioeconomics: dict[str, Any], metadata_known: bool) -> dict[str, float | str]:
-    climate_signals = derive_climate_signals(weather, archive)
+def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict[str, Any], noaa_vhp: dict[str, Any], socioeconomics: dict[str, Any], metadata_known: bool) -> dict[str, float | str]:
+    climate_signals = derive_climate_signals(weather, archive, noaa_vhp)
     economic_signals = derive_economic_signals(socioeconomics)
     climate_stress = float(climate_signals['climateStressScore'])
     precipitation_anomaly = float(climate_signals['precipitationAnomalyScore'])
@@ -393,9 +480,10 @@ def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict
     dry_days_ratio = float(climate_signals['dryDaysRatio'])
     ndvi_proxy = float(climate_signals['ndviProxy'])
     economic_stress = float(economic_signals['economicStressScore'])
+    noaa_vegetation_stress = float(climate_signals['noaaVegetationStressScore'])
 
-    food_risk = clamp((detector_score * 0.44) + (climate_stress * 0.24) + (economic_stress * 0.16) + (precipitation_anomaly * 0.1) + (thermal_anomaly * 0.06))
-    operational_priority = clamp((food_risk * 0.48) + (economic_stress * 0.16) + (precipitation_anomaly * 0.1) + (dry_days_ratio * 0.08) + ((1 - ndvi_proxy) * 0.1) + (thermal_anomaly * 0.08))
+    food_risk = clamp((detector_score * 0.4) + (climate_stress * 0.22) + (economic_stress * 0.15) + (precipitation_anomaly * 0.08) + (thermal_anomaly * 0.05) + (noaa_vegetation_stress * 0.1))
+    operational_priority = clamp((food_risk * 0.46) + (economic_stress * 0.16) + (precipitation_anomaly * 0.08) + (dry_days_ratio * 0.07) + ((1 - ndvi_proxy) * 0.08) + (thermal_anomaly * 0.05) + (noaa_vegetation_stress * 0.1))
 
     confidence = 0.48
     if weather['source'] == 'open-meteo-current':
@@ -404,6 +492,8 @@ def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict
         confidence += 0.12
     if socioeconomics['source'] == 'world-bank-open-data':
         confidence += 0.1
+    if noaa_vhp['source'] == 'noaa-star-vhp':
+        confidence += 0.08
     if metadata_known:
         confidence += 0.08
     if detector_score > 0:
@@ -422,6 +512,7 @@ def compute_scores(detector_score: float, weather: dict[str, Any], archive: dict
         'ndviProxy': round(ndvi_proxy, 3),
         'droughtLabel': derive_drought_label(climate_stress),
         'severity': severity_from_priority(operational_priority),
+        'noaaVegetationStressScore': round(noaa_vegetation_stress, 3),
     }
 
 
@@ -430,17 +521,19 @@ def evidence_hash(payload: dict[str, Any]) -> str:
     return hashlib.sha256(serialized.encode('utf-8')).hexdigest()
 
 
-def build_enriched_context(latitude: float, longitude: float, detector_score: float, country_codes: list[str]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def build_enriched_context(latitude: float, longitude: float, detector_score: float, country_codes: list[str]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     fallback_current = fallback_weather(latitude, longitude, detector_score)
     weather: dict[str, Any]
     archive: dict[str, Any]
+    noaa_vhp: dict[str, Any]
     socioeconomics: dict[str, Any]
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=6) as executor:
         current_future = executor.submit(fetch_open_meteo_current, latitude, longitude)
         archive_future = executor.submit(fetch_open_meteo_archive, latitude, longitude)
         gdp_future = executor.submit(fetch_world_bank_indicator, country_codes, WORLD_BANK_GDP_PER_CAPITA)
         inflation_future = executor.submit(fetch_world_bank_indicator, country_codes, WORLD_BANK_INFLATION)
+        noaa_futures = [executor.submit(fetch_noaa_vhp_country, code) for code in country_codes]
 
         try:
             weather = normalize_weather_payload(current_future.result(), fallback_current)
@@ -453,13 +546,19 @@ def build_enriched_context(latitude: float, longitude: float, detector_score: fl
         except Exception:
             archive = fallback_hist
 
+        fallback_noaa = fallback_noaa_vhp(detector_score)
+        try:
+            noaa_vhp = normalize_noaa_vhp_payload([future.result() for future in noaa_futures], fallback_noaa)
+        except Exception:
+            noaa_vhp = fallback_noaa
+
         fallback_social = fallback_socioeconomics(detector_score, country_codes)
         try:
             socioeconomics = normalize_socioeconomics_payload(gdp_future.result(), inflation_future.result(), fallback_social)
         except Exception:
             socioeconomics = fallback_social
 
-    return weather, archive, socioeconomics
+    return weather, archive, noaa_vhp, socioeconomics
 
 
 def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -476,6 +575,8 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         'fallbackArchive': 0,
         'worldBank': 0,
         'fallbackWorldBank': 0,
+        'noaaVhp': 0,
+        'fallbackNoaaVhp': 0,
     }
 
     for index, item in enumerate(detector_hotspots):
@@ -487,12 +588,13 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
         metadata = REGION_METADATA.get(region_name, {})
         country_codes = list(metadata.get('countryCodes', ['WLD']))
 
-        weather, archive, socioeconomics = build_enriched_context(latitude, longitude, detector_score, country_codes)
+        weather, archive, noaa_vhp, socioeconomics = build_enriched_context(latitude, longitude, detector_score, country_codes)
         provider_counts['openMeteoCurrent' if weather['source'] == 'open-meteo-current' else 'fallbackCurrent'] += 1
         provider_counts['openMeteoArchive' if archive['source'] == 'open-meteo-archive' else 'fallbackArchive'] += 1
+        provider_counts['noaaVhp' if noaa_vhp['source'] == 'noaa-star-vhp' else 'fallbackNoaaVhp'] += 1
         provider_counts['worldBank' if socioeconomics['source'] == 'world-bank-open-data' else 'fallbackWorldBank'] += 1
 
-        scores = compute_scores(detector_score, weather, archive, socioeconomics, bool(metadata))
+        scores = compute_scores(detector_score, weather, archive, noaa_vhp, socioeconomics, bool(metadata))
         affected = int(max(75_000, estimated_pi // 900))
         people_helped = int(max(10_000, estimated_pi // 4200))
         distributed = int(estimated_pi * clamp(float(scores['operationalPriorityScore']) * 0.22, 0.12, 0.35))
@@ -501,6 +603,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
             'detector': item,
             'weather': weather,
             'archive': archive,
+            'noaaVhp': noaa_vhp,
             'socioeconomics': socioeconomics,
             'scores': scores,
             'modelVersion': MODEL_VERSION,
@@ -547,6 +650,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     'thermalAnomalyScore': scores['thermalAnomalyScore'],
                     'dryDaysRatio': scores['dryDaysRatio'],
                     'ndviProxy': scores['ndviProxy'],
+                    'noaaVegetationStressScore': scores['noaaVegetationStressScore'],
                     'recentPrecipitationMm': round(float(archive['recent_precipitation_mm']), 2),
                     'baselinePrecipitationMm': round(float(archive['baseline_precipitation_mm']), 2),
                     'recentTemperatureMaxAvg': round(float(archive['recent_temperature_max_avg']), 2),
@@ -554,12 +658,18 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                     'gdpPerCapitaUsd': round(float(socioeconomics['gdp_per_capita_usd']), 2),
                     'inflationConsumerPricesPct': round(float(socioeconomics['inflation_consumer_prices_pct']), 2),
                     'macroReferenceYear': socioeconomics['reference_year'] or 'n/a',
+                    'noaaVhi': round(float(noaa_vhp['vhi']), 2),
+                    'noaaVci': round(float(noaa_vhp['vci']), 2),
+                    'noaaTci': round(float(noaa_vhp['tci']), 2),
+                    'noaaReferenceWeek': str(noaa_vhp['reference_week'] or 'n/a'),
+                    'noaaReferenceYear': str(noaa_vhp['reference_year'] or 'n/a'),
                 },
                 'evidence': {
-                    'sources': ['detector', weather['source'], archive['source'], socioeconomics['source']],
+                    'sources': ['detector', weather['source'], archive['source'], noaa_vhp['source'], socioeconomics['source']],
                     'evidenceHash': evidence_hash(evidence_payload),
                     'weatherSource': weather['source'],
                     'historicalClimateSource': archive['source'],
+                    'noaaVegetationSource': noaa_vhp['source'],
                     'macroeconomicSource': socioeconomics['source'],
                     'detectorTimestamp': item.get('timestamp'),
                 },
@@ -571,6 +681,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     avg_precip_anomaly = round(mean(float(item['analytics']['precipitationAnomalyScore']) for item in curated), 3) if curated else 0.0
     avg_thermal_anomaly = round(mean(float(item['analytics']['thermalAnomalyScore']) for item in curated), 3) if curated else 0.0
     avg_economic_stress = round(mean(float(item['analytics']['economicStressScore']) for item in curated), 3) if curated else 0.0
+    avg_noaa_vegetation_stress = round(mean(float(item['analytics']['noaaVegetationStressScore']) for item in curated), 3) if curated else 0.0
 
     audit = {
         'generatedAt': started_at.isoformat(),
@@ -598,6 +709,11 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
                 'successCount': provider_counts['openMeteoArchive'],
                 'fallbackCount': provider_counts['fallbackArchive'],
             },
+            'noaaVegetation': {
+                'name': 'NOAA STAR Vegetation Health Product',
+                'successCount': provider_counts['noaaVhp'],
+                'fallbackCount': provider_counts['fallbackNoaaVhp'],
+            },
             'macroeconomics': {
                 'name': 'World Bank Open Data',
                 'indicators': [WORLD_BANK_GDP_PER_CAPITA, WORLD_BANK_INFLATION],
@@ -610,6 +726,7 @@ def build_curated_hotspots() -> tuple[list[dict[str, Any]], dict[str, Any]]:
             'avgPrecipitationAnomalyScore': avg_precip_anomaly,
             'avgThermalAnomalyScore': avg_thermal_anomaly,
             'avgEconomicStressScore': avg_economic_stress,
+            'avgNoaaVegetationStressScore': avg_noaa_vegetation_stress,
         },
     }
     return curated, audit

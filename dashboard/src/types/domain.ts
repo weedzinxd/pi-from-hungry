@@ -39,6 +39,12 @@ export interface CrisisEvent {
     gdpPerCapitaUsd?: number;
     inflationConsumerPricesPct?: number;
     macroReferenceYear?: string;
+    noaaVhi?: number;
+    noaaVci?: number;
+    noaaTci?: number;
+    noaaReferenceWeek?: string;
+    noaaReferenceYear?: string;
+    noaaVegetationStressScore?: number;
     sourceModelVersion: string;
     computedAt: string;
   };
@@ -47,6 +53,7 @@ export interface CrisisEvent {
     evidenceHash: string;
     weatherSource?: string;
     historicalClimateSource?: string;
+    noaaVegetationSource?: string;
     macroeconomicSource?: string;
     detectorTimestamp?: string;
   };

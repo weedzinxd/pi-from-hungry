@@ -59,7 +59,7 @@ export async function GET() {
       pipeline: {
         auditFile: './src/data/pipeline-source-audit.json',
         auditAvailable: localAudit.source === 'audit-file',
-        modelVersion: String(localAudit.audit.modelVersion ?? 'pfh-ml-pipeline-v5'),
+        modelVersion: String(localAudit.audit.modelVersion ?? 'pfh-ml-pipeline-v6'),
         currentClimateProvider: 'open-meteo-forecast',
         historicalClimateProvider: 'open-meteo-archive',
         macroeconomicProvider: 'world-bank-open-data',

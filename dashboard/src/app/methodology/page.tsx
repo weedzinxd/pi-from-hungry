@@ -12,12 +12,12 @@ const methodologyCards = [
   {
     icon: Database,
     title: 'Input layer',
-    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo Forecast', 'Janela histórica via Open-Meteo Archive', 'Macroeconomia pública via World Bank Open Data', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
+    items: ['Detector de hotspots existente', 'Clima atual via Open-Meteo Forecast', 'Janela histórica via Open-Meteo Archive', 'Vegetation Health satelital via NOAA STAR', 'Macroeconomia pública via World Bank Open Data', 'Metadata regional estruturada', 'Snapshot local de eventos e deployment'],
   },
   {
     icon: BrainCircuit,
     title: 'Scoring layer',
-    items: ['foodRiskScore', 'climateStressScore', 'economicStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'thermalAnomalyScore', 'dryDaysRatio', 'ndviProxy'],
+    items: ['foodRiskScore', 'climateStressScore', 'economicStressScore', 'operationalPriorityScore', 'confidenceScore', 'precipitationAnomalyScore', 'thermalAnomalyScore', 'dryDaysRatio', 'ndviProxy', 'noaaVegetationStressScore'],
   },
   {
     icon: ShieldCheck,
@@ -76,6 +76,7 @@ export default function MethodologyPage() {
               <p>• climateStressScore combina temperatura, umidade inversa, vento, baixa precipitação instantânea, anomalia histórica, fração de dias secos e um proxy vegetal.</p>
               <p>• precipitationAnomalyScore usa janela matemática real: 30 dias recentes contra baseline equivalente de 90 dias.</p>
               <p>• thermalAnomalyScore mede aquecimento recente contra a média histórica curta da própria coordenada.</p>
+              <p>• noaaVegetationStressScore adiciona um sinal satelital real via NOAA STAR Vegetation Health Products (VHI/VCI/TCI).</p>
               <p>• economicStressScore adiciona vulnerabilidade pública via PIB per capita e inflação do World Bank.</p>
               <p>• dryDaysRatio aumenta a sensibilidade quando a maior parte dos últimos dias teve precipitação baixa.</p>
               <p>• ndviProxy continua transparente como aproximação até a integração de NDVI real.</p>
@@ -86,7 +87,7 @@ export default function MethodologyPage() {
           <Panel>
             <PanelHeader title="Limitações honestas" subtitle="Importante para credibilidade pública" />
             <PanelBody className="space-y-3 text-sm text-zinc-300">
-              <p>• ainda não há NDVI satelital real, preços de alimentos dedicados ou conflito integrados nesta versão.</p>
+              <p>• já usamos NOAA STAR como sinal satelital vegetativo, mas ainda não há NDVI satelital dedicado, preços de alimentos ou conflito integrados nesta versão.</p>
               <p>• a série temporal atual é inicial e será fortalecida com snapshots sucessivos do pipeline.</p>
               <p>• a demo não substitui sistemas humanitários oficiais.</p>
               <p>• o pipeline atual é um passo intermediário entre mock e inteligência operacional séria.</p>

@@ -33,7 +33,7 @@ export function DataQualityShowcase() {
         <div className="grid gap-3 lg:grid-cols-3 text-sm text-zinc-300">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">Último snapshot: <span className="font-semibold text-white">{formatDateTime(data?.audit.generatedAt)}</span></div>
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">Tempo de build: <span className="font-semibold text-white">{formatDurationMs(data?.audit.durationMs)}</span></div>
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">Modelo ativo: <span className="font-semibold text-white">{data?.audit.modelVersion ?? 'pfh-ml-pipeline-v5'}</span></div>
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">Modelo ativo: <span className="font-semibold text-white">{data?.audit.modelVersion ?? 'pfh-ml-pipeline-v6'}</span></div>
         </div>
       </PanelBody>
     </Panel>
